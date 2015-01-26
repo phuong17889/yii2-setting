@@ -41,6 +41,12 @@ class DefaultController extends Controller
             foreach($setting as $key => $value) {
                 Setting::updateAll(['value' => $value], ['code' => $key]);
             }
+            Yii::$app->session->setFlash('alert', [
+                'body'=>\Yii::t('backend', 'Settings has been successfully saved'),
+                'options'=>['class'=>'alert-success']
+            ]);
+            $tabHash = Yii::$app->request->post('tabHash', '');
+            return $this->refresh($tabHash);
         }
 
         $settingParent = Setting::find()->where(['parent_id' => 0])->orderBy(['sort_order' => SORT_ASC])->all();
