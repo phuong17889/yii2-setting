@@ -1,6 +1,6 @@
 <?php
 
-namespace funson86\setting;
+namespace itzen\setting;
 
 use yii\base\BootstrapInterface;
 
@@ -14,23 +14,14 @@ class Bootstrap implements BootstrapInterface
      */
     public function bootstrap($app)
     {
-        // Add module URL rules.
-        /*$app->getUrlManager()->addRules(
-            [
-                'POST <_m:blogs>' => '<_m>/user/create',
-                '<_m:blogs>' => '<_m>/default/index',
-                '<_m:blogs>/<id:\d+>-<alias:[a-zA-Z0-9_-]{1,100}+>' => '<_m>/default/view',
-            ]
-        )*/;
-
         // Add module I18N category.
-        if (!isset($app->i18n->translations['funson86/setting']) && !isset($app->i18n->translations['funson86/*'])) {
-            $app->i18n->translations['funson86/setting'] = [
+        if (!isset($app->i18n->translations['setting'])){
+            $app->i18n->translations['setting'] = [
                 'class' => 'yii\i18n\PhpMessageSource',
-                'basePath' => '@funson86/setting/messages',
+                'basePath' => '@itzen/setting/messages',
                 'forceTranslation' => true,
                 'fileMap' => [
-                    'funson86/setting' => 'setting.php',
+                    'itzen/setting' => 'setting.php',
                 ]
             ];
         }

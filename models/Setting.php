@@ -1,9 +1,9 @@
 <?php
 
-namespace funson86\setting\models;
+namespace itzen\setting\models;
 
 use Yii;
-use funson86\setting\Module;
+use itzen\setting\Module;
 
 /**
  * This is the model class for table "setting".
@@ -24,7 +24,7 @@ class Setting extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'setting';
+        return '{{%setting}}';
     }
 
     /**

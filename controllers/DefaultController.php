@@ -1,8 +1,8 @@
 <?php
 
-namespace funson86\setting\controllers;
+namespace itzen\setting\controllers;
 
-use funson86\setting\models\Setting;
+use itzen\setting\models\Setting;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\web\Controller;

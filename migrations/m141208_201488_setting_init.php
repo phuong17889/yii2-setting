@@ -4,16 +4,11 @@ use yii\db\Migration;
 use yii\db\Schema;
 
 /**
- * CLass m141208_201480_blog_init
- * @package funson86\blog\migrations
+ * CLass m141208_201480_setting_init
+ * @package itzen\blog\migrations
  *
- * Create blog tables.
+ * Create setting tables.
  *
- * Will be created 4 tables:
- * - `{{%blog_catalog}}` - Blog catalog
- * - `{{%blog_post}}` -
- * - `{{%blog_comment}}` -
- * - `{{%blog_tag}}` -
  */
 class m141208_201488_setting_init extends Migration
 {
