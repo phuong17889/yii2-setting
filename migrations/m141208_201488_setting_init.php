@@ -17,22 +17,23 @@ class m141208_201488_setting_init extends Migration
      */
     public function up()
     {
-        // MySql table options
-        $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB';
-
+        $driver = $this->db->driverName;
+        $tableOptions = "";
+        if ($driver == 'mysql') {
+            // MySql table options
+            $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB';
+        }
         // table blog_catalog
         $this->createTable(
             '{{%setting}}',
-            [
-                'id' => Schema::TYPE_PK,
+            ['id' => Schema::TYPE_PK,
                 'parent_id' => Schema::TYPE_INTEGER . ' NOT NULL DEFAULT 0',
                 'code' => Schema::TYPE_STRING . '(32) NOT NULL',
                 'type' => Schema::TYPE_STRING . '(32) NOT NULL',
                 'store_range' => Schema::TYPE_STRING . '(255)',
                 'store_dir' => Schema::TYPE_STRING . '(255)',
                 'value' => Schema::TYPE_TEXT . '',
-                'sort_order' => Schema::TYPE_INTEGER . ' NOT NULL DEFAULT 50',
-            ],
+                'sort_order' => Schema::TYPE_INTEGER . ' NOT NULL DEFAULT 50',],
             $tableOptions
         );
 
@@ -48,9 +49,19 @@ class m141208_201488_setting_init extends Migration
     /**
      * @return string SQL to insert first user
      */
-    private function getSettingSql()
+    private
+    function getSettingSql()
     {
-        return "INSERT INTO {{%setting}} (`id`, `parent_id`, `code`, `type`, `store_range`, `store_dir`, `value`, `sort_order`) VALUES
+        $driver = $this->db->driverName;
+        $sqlBefore = "";
+        $sqlAfter = "";
+        if ($driver === 'mssql' || $driver === 'dblib' || $driver === 'sqlsrv') {
+            $sqlBefore = 'SET IDENTITY_INSERT {{%setting}} ON;';
+            $sqlAfter = 'SET IDENTITY_INSERT {{%setting}} OFF;';
+        }
+
+        return "$sqlBefore
+                INSERT INTO {{%setting}} (id, parent_id, code, type, store_range, store_dir, value, sort_order) VALUES
                 (11, 0, 'info', 'group', '', '', '', '50'),
                 (21, 0, 'basic', 'group', '', '', '', '50'),
                 (31, 0, 'smtp', 'group', '', '', '', '50'),
@@ -63,14 +74,16 @@ class m141208_201488_setting_init extends Migration
                 (3112, 31, 'smtpPort', 'text', '', '', '', '50'),
                 (3113, 31, 'smtpUser', 'text', '', '', '', '50'),
                 (3114, 31, 'smtpPassword', 'password', '', '', '', '50'),
-                (3115, 31, 'smtpMail', 'text', '', '', '', '50')
+                (3115, 31, 'smtpMail', 'text', '', '', '', '50');
+                $sqlAfter
                 ";
     }
 
     /**
      * @inheritdoc
      */
-    public function down()
+    public
+    function down()
     {
         $this->dropTable('{{%setting}}');
     }
