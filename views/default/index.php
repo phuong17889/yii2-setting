@@ -6,6 +6,8 @@ use yii\helpers\ArrayHelper;
 use itzen\setting\models\Setting;
 use itzen\setting\Module;
 
+/* @var $this yii\web\View */
+
 $this->title = Module::t('setting', 'Setting');
 $this->params['breadcrumbs'][] = $this->title;
 
@@ -16,19 +18,57 @@ foreach ($settingParent as $parent) {
     $str = '';
     $children = Setting::find()->where(['parent_id' => $parent->id])->orderBy(['sort_order' => SORT_ASC, 'id' => SORT_ASC])->all();
     foreach ($children as $child) {
-        $str .= '<div class="form-group field-blogcatalog-parent_id"><label class="col-lg-2 control-label" for="blogcatalog-parent_id">' . Module::t('setting', $child->code) . '</label><div class="col-lg-3">';
+        $str .= '<div class="form-group field-blogcatalog-parent_id"><label class="col-lg-2 control-label" for="blogcatalog-parent_id">' . Module::t('setting', $child->code) . '</label><div class="col-lg-10">';
 
-        if ($child->type == 'text')
+        if ($child->type == 'text') {
             $str .= Html::textInput("Setting[$child->code]", $child->value, ["class" => "form-control"]);
-        elseif ($child->type == 'password')
+        } elseif ($child->type == 'password') {
             $str .= Html::passwordInput("Setting[$child->code]", $child->value, ["class" => "form-control"]);
-        elseif ($child->type == 'select') {
+        } elseif ($child->type == 'select') {
             $options = [];
             $arrayOptions = explode(',', $child->store_range);
             foreach ($arrayOptions as $option)
                 $options[$option] = Module::t('setting', $option);
 
             $str .= Html::dropDownList("Setting[$child->code]", $child->value, $options, ["class" => "form-control"]);
+        } elseif ($child->type == 'redactor') {
+            $options = [];
+            $arrayOptions = explode('|', $child->store_range);
+            foreach ($arrayOptions as $option) {
+                $options[$option] = $option;
+            }
+
+            $str .= '<div class="col-lg-8">' . \yii\imperavi\Widget::widget([
+                        'id'=>\yii\helpers\Inflector::slug($child->code),
+                        'attribute' => "Setting[$child->code]",
+                        'value'     => $child->value,
+                        'plugins'   => ['fullscreen', 'imagemanager', 'table', 'fontsize', 'fontcolor', 'clips'],
+                        'options'   => [
+                            'minHeight'          => 400,
+                            'maxHeight'          => 400,
+                            'buttonSource'       => true,
+                            'convertDivs'        => false,
+                            'removeEmptyTags'    => false,
+                            'replaceDivs'        => false,
+                            'imageUpload'        => Yii::$app->urlManager->createUrl(['/file-storage/upload-imperavi']),
+                            'imageManagerJson'   => '/file-storage/index-json',
+                            'clipboardUpload'    => true,
+                            'clipboardUploadUrl' => Yii::$app->urlManager->createUrl(['/file-storage/upload-imperavi']),
+                        ]
+                    ]
+                ) . '</div>';
+            $str .= '<div class="col-lg-4"><div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">' . Module::t('setting', 'Clips') . '</h3>
+                        </div>
+                        <div class="panel-body">'
+                        . Html::dropDownList("clips", '', $options, ["class" => "form-control insert-clip ".\yii\helpers\Inflector::slug($child->code)])
+                        . Html::button(Module::t('setting', 'Insert clip'), ["class" => "form-control insert-clip-btn", 'data-redactor-id'=>\yii\helpers\Inflector::slug($child->code)]) .
+                        '</div>
+                    </div></div>';
+
+
+
         }
 
         $str .= '</div></div>';
@@ -40,36 +80,28 @@ foreach ($settingParent as $parent) {
 ?>
 
 <?php
-$form = ActiveForm::begin([
-            'id' => 'setting-form',
-            'options' => [
-                'class' => 'form-horizontal nav-tabs-custom',
-            ],
-            'fieldConfig' => [
-                'template' => "{label}\n<div class=\"col-lg-3\">{input}{hint}</div>\n<div class=\"col-lg-5\">{error}</div>",
-                'labelOptions' => ['class' => 'col-lg-2 control-label'],
-            ],
-        ]);
+$form = ActiveForm::begin(['id'          => 'setting-form',
+                           'options'     => ['class' => 'form-horizontal nav-tabs-custom',],
+                           'fieldConfig' => ['template'     => "{label}\n<div class=\"col-lg-3\">{input}{hint}</div>\n<div class=\"col-lg-5\">{error}</div>",
+                                             'labelOptions' => ['class' => 'col-lg-2 control-label'],],]);
 ?>
 
 <?php
-echo \yii\bootstrap\Tabs::widget([
-    'items' => $items,
-    'options' => ['tag' => 'div'],
-    'itemOptions' => ['tag' => 'div'],
-    'headerOptions' => ['class' => 'my-class'],
-    'clientOptions' => ['collapsible' => false],
-]);
+echo \yii\bootstrap\Tabs::widget(['items'         => $items,
+                                  'options'       => ['tag' => 'div'],
+                                  'itemOptions'   => ['tag' => 'div'],
+                                  'headerOptions' => ['class' => 'my-class'],
+                                  'clientOptions' => ['collapsible' => false],]);
 ?>
-<div class="tab-content">
-    <div class="form-group">
-        <div class="col-lg-3 col-lg-offset-2">
-            <?= Html::input('hidden', 'tabHash', '', ['id'=>'tabHash']); ?>
-            <?= Html::submitButton(Module::t('setting', 'Update'), ['class' => 'btn btn-primary']) ?>
+    <div class="tab-content">
+        <div class="form-group">
+            <div class="col-lg-3 col-lg-offset-2">
+                <?= Html::input('hidden', 'tabHash', '', ['id' => 'tabHash']); ?>
+                <?= Html::submitButton(Module::t('setting', 'Update'), ['class' => 'btn btn-primary']) ?>
+            </div>
         </div>
     </div>
-</div>
-<br/>
+    <br/>
 <?php ActiveForm::end(); ?>
 <?php
 $js = <<<JS
@@ -87,8 +119,14 @@ $js = <<<JS
        }
        jQuery('#tabHash').val('#'+$(e.target).attr('href').substr(1));
     });
-        
+
+    jQuery('.tab-content').on('click','.insert-clip-btn', function(){
+        //alert(jQuery('.insert-clip').val());
+        jQuery('#'+jQuery(this).data('redactor-id')).redactor('insert.html', jQuery('.insert-clip.'+jQuery(this).data('redactor-id')).val(), false);
+        //redactor.insert.html(jQuery('.insert-clip').val(), false);
+    });
+
 JS;
-    
-    $this->registerJs($js);
+
+$this->registerJs($js);
 ?>
