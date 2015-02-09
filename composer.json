@@ -10,8 +10,10 @@
             "email": "funson86@gmail.com"
         },
         {
-            "name": "Pawe³ Kania",
-            "email": "pawel.kania@itzen.pl"
+            "name": "Pawel Kania",
+            "email": "pawel.kania@itzen.pl",
+            "homepage": "http://itzen.pl/",
+            "role": "Itzen.pl founder"
         }
     ],
     "require": {

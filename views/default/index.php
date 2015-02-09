@@ -22,7 +22,11 @@ foreach ($settingParent as $parent) {
 
         if ($child->type == 'text') {
             $str .= Html::textInput("Setting[$child->code]", $child->value, ["class" => "form-control"]);
-        } elseif ($child->type == 'password') {
+        }
+        elseif ($child->type == 'email') {
+            $str .= Html::textInput("Setting[$child->code]", $child->value, ["class" => "form-control email"]);
+        }
+        elseif ($child->type == 'password') {
             $str .= Html::passwordInput("Setting[$child->code]", $child->value, ["class" => "form-control"]);
         } elseif ($child->type == 'select') {
             $options = [];
