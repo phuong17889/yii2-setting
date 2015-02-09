@@ -70,6 +70,7 @@ INSERT INTO `setting` (`id`, `parent_id`, `code`, `type`, `store_range`, `store_
 (1111, 11, 'siteName', 'text', '', '', 'Your Site', '50'),
 (1112, 11, 'siteTitle', 'text', '', '', 'Your Site Title', '50'),
 (1113, 11, 'siteKeyword', 'text', '', '', 'Your Site Keyword', '50'),
+(1114, 11, 'someText', 'redactor', '<div class=\"label\">Some clip</div>|<div>Another clip for redactor</div>', '', '', '50'); // it will generate redactor wysywig
 (2111, 21, 'timezone', 'select', '-12,-11,-10,-9,-8,-7,-6,-5,-4,-3.5,-3,-2,-1,0,1,2,3,3.5,4,4.5,5,5.5,5.75,6,6.5,7,8,9,9.5,10,11,12', '', '8', '50'),
 (2112, 21, 'commentCheck', 'select', '0,1', '', '1', '50'),
 (3111, 31, 'smtpHost', 'text', '', '', 'localhost', '50'),
