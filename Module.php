@@ -5,7 +5,7 @@ use Yii;
 
 class Module extends \yii\base\Module
 {
-    public $controllerNamespace = 'itzen\setting\controllers\frontend';
+    public $controllerNamespace = 'itzen\setting\controllers';
 
     protected $_isBackend;
 
