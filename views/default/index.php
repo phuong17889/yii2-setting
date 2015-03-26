@@ -13,7 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 $items = [];
 foreach ($settingParent as $parent) {
-    $item['label'] = Module::t('setting', $parent->code);
+    $item['label'] = Module::t('setting', $parent->name);
 
     $str = '';
     $children = Setting::find()->where(['parent_id' => $parent->id])->orderBy([
@@ -21,7 +21,7 @@ foreach ($settingParent as $parent) {
         'id' => SORT_ASC
     ])->all();
     foreach ($children as $child) {
-        $str .= '<div class="form-group field-blogcatalog-parent_id"><label class="col-lg-2 control-label" for="blogcatalog-parent_id">' . Module::t('setting', $child->code) . '</label><div class="col-lg-10">';
+        $str .= '<div class="form-group field-blogcatalog-parent_id"><label class="col-lg-2 control-label" for="blogcatalog-parent_id">' . Module::t('setting', $child->name) . '</label><div class="col-lg-10">';
 
         if ($child->type == 'text') {
             $str .= Html::textInput("Setting[$child->code]", $child->value, ["class" => "form-control"]);
@@ -81,7 +81,7 @@ foreach ($settingParent as $parent) {
                 $options[$option] = $option;
             }
 
-            $str .= '<div class="col-lg-8">' . \yii\imperavi\Widget::widget([
+            $str .= '<div class="row"><div class="col-lg-8">' . \yii\imperavi\Widget::widget([
                         'id' => \yii\helpers\Inflector::slug($child->code),
                         'attribute' => "Setting[$child->code]",
                         'value' => $child->value,
@@ -110,7 +110,7 @@ foreach ($settingParent as $parent) {
                     "class" => "form-control insert-clip-btn",
                     'data-redactor-id' => \yii\helpers\Inflector::slug($child->code)
                 ]) .
-                '</div>
+                '</div></div>
                     </div></div>';
 
 
