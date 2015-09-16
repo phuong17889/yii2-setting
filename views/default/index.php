@@ -25,6 +25,8 @@ foreach ($settingParent as $parent) {
 
         if ($child->type == 'text') {
             $str .= Html::textInput("Setting[$child->code]", $child->value, ["class" => "form-control"]);
+        } elseif ($child->type == 'textarea') {
+            $str .= Html::textarea("Setting[$child->code]", $child->value, ["class" => "form-control"]);
         } elseif ($child->type == 'email') {
             $str .= Html::textInput("Setting[$child->code]", $child->value, ["class" => "form-control email"]);
         } elseif ($child->type == 'password') {
