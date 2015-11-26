@@ -25,7 +25,7 @@ foreach ($settingParent as $parent) {
 
         if ($child->type == 'text') {
             $str .= Html::textInput("Setting[$child->code]", $child->value, ["class" => "form-control"]);
-        } elseif ($child->type == 'textarea') { 
+        } elseif ($child->type == 'textarea') {
             $str .= Html::textarea("Setting[$child->code]", $child->value, ["class" => "form-control"]);
         } elseif ($child->type == 'email') {
             $str .= Html::textInput("Setting[$child->code]", $child->value, ["class" => "form-control email"]);
@@ -61,7 +61,7 @@ foreach ($settingParent as $parent) {
                 ],
                 'pluginOptions' => [
                     'tags' => array_keys($options),
-                    'createSearchChoice'=> new \yii\web\JsExpression('function() { return null; }'),
+                    'createSearchChoice' => new \yii\web\JsExpression('function() { return null; }'),
 
                 ]
             ]);
@@ -82,12 +82,12 @@ foreach ($settingParent as $parent) {
             foreach ($arrayOptions as $option) {
                 $options[$option] = $option;
             }
-
+            \backend\assets\RedactorPlugins::register($this);
             $str .= '<div class="row"><div class="col-lg-8">' . \yii\imperavi\Widget::widget([
                         'id' => \yii\helpers\Inflector::slug($child->code),
                         'attribute' => "Setting[$child->code]",
                         'value' => $child->value,
-                        'plugins' => ['fullscreen', 'imagemanager', 'table', 'fontsize', 'fontcolor', 'clips'],
+                        'plugins' => ['fullscreen', 'imagemanager', 'table', 'fontsize', 'fontcolor', 'customColors', 'clips'],
                         'options' => [
                             'minHeight' => 400,
                             'maxHeight' => 400,
