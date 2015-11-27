@@ -87,7 +87,7 @@ foreach ($settingParent as $parent) {
                         'id' => \yii\helpers\Inflector::slug($child->code),
                         'attribute' => "Setting[$child->code]",
                         'value' => $child->value,
-                        'plugins' => ['fullscreen', 'imagemanager', 'table', 'fontsize', 'fontcolor', 'customColors', 'clips'],
+                        'plugins' => ['fullscreen', 'imagemanager', 'table', 'fontsize', 'fontcolor', 'customColors'],
                         'options' => [
                             'minHeight' => 400,
                             'maxHeight' => 400,
