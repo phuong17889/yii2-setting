@@ -82,7 +82,7 @@ foreach ($settingParent as $parent) {
             foreach ($arrayOptions as $option) {
                 $options[$option] = $option;
             }
-            \backend\assets\RedactorPlugins::register($this);
+            \itzen\setting\RedactorPlugins::register($this);
             $str .= '<div class="row"><div class="col-lg-8">' . \yii\imperavi\Widget::widget([
                         'id' => \yii\helpers\Inflector::slug($child->code),
                         'attribute' => "Setting[$child->code]",
