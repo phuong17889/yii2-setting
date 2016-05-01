@@ -1,5 +1,5 @@
 {
-    "name": "itzen/yii2-setting",
+    "name": "navatech/yii2-setting",
     "description": "Yii2 Setting for other application",
     "type": "yii2-extension",
     "keywords": ["yii2","extension","setting"],
@@ -10,18 +10,25 @@
             "email": "funson86@gmail.com"
         },
         {
-            "name": "Pawel Kania",
-            "email": "pawel.kania@itzen.pl",
-            "homepage": "http://itzen.pl/",
-            "role": "Itzen.pl founder"
+	    "name": "Pawel Kania",
+            "email": "pawel.kania@itzen.pl",        
+        },
+        {
+            "name": "Le Phuong",
+            "email": "phuong17889@gmail.com"
         }
     ],
     "require": {
-        "yiisoft/yii2": "*"
-    },
+        "yiisoft/yii2": "*",
+		"yiisoft/yii2-bootstrap" : "*",
+		"kartik-v/yii2-tabs-x" : "@dev"
+   },
     "autoload": {
         "psr-4": {
-            "itzen\\setting\\": ""
+            "navatech\\setting\\": "src/"
         }
+    },
+    "extra": {
+        "bootstrap": "navatech\\setting\\Bootstrap"
     }
 }
