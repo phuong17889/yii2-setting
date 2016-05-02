@@ -10,7 +10,7 @@ class RedactorPlugins extends AssetBundle
 //    public $basePath = '@webroot';
 //    public $baseUrl = '@web';
 
-    public $sourcePath = '@vendor/navatech/yii2-setting/assets';
+    public $sourcePath = '@vendor/navatech/yii2-setting/src/assets';
 
     public $publishOptions = [
         'forceCopy' => true,
