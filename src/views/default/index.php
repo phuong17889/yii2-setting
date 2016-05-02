@@ -1,6 +1,8 @@
 <?php
+use kartik\tabs\TabsX;
 use navatech\setting\models\Setting;
 use navatech\setting\Module;
+use yii\bootstrap\ActiveForm;
 use yii\web\View;
 
 /**
@@ -10,9 +12,25 @@ use yii\web\View;
  */
 $this->title                   = Module::t('setting', 'Setting');
 $this->params['breadcrumbs'][] = $this->title;
-//$form = Activ
-echo \kartik\tabs\TabsX::widget([
-	'items'        => $items,
-	'position'     => \kartik\tabs\TabsX::POS_ABOVE,
+$form                          = ActiveForm::begin([
+	'id' => 'setting',
+]);
+$items                         = [];
+
+echo TabsX::widget([
+	'items'        => [
+		[
+			'label'   => '<i class="glyphicon glyphicon-home"></i> Home',
+			'content' => 'sdfsdf',
+			'active'  => true,
+		],
+		[
+			'label'   => '<i class="glyphicon glyphicon-user"></i> Profile',
+			'content' => 'sdfsdfsdf',
+		],
+	],
+	'bordered'     => true,
+	'position'     => TabsX::POS_ABOVE,
 	'encodeLabels' => false,
 ]);
+ActiveForm::end();

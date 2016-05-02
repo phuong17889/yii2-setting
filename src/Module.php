@@ -9,9 +9,12 @@ class Module extends \yii\base\Module {
 
 	protected $_isBackend;
 
+	protected $_isMultiLanguage    = false;
+
 	public function init() {
 		parent::init();
 		$this->setViewPath('@navatech/setting/views');
+		$this->_isMultiLanguage = class_exists('navatech\\language\\helpers\\MultiLanguageHelpers');
 	}
 
 	/**
