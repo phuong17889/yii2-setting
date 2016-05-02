@@ -22,7 +22,6 @@ echo TabsX::widget([
 		[
 			'label'   => '<i class="glyphicon glyphicon-home"></i> Home',
 			'content' => 'sdfsdf',
-			'active'  => true,
 		],
 		[
 			'label'   => '<i class="glyphicon glyphicon-user"></i> Profile',

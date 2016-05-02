@@ -84,4 +84,34 @@ class Setting extends ActiveRecord {
 			'sort_order'  => Module::t('common', 'Sort Order'),
 		];
 	}
+
+	/**
+	 * @return array
+	 */
+	public static function getItems() {
+		/**@var $parentSettings self[] */
+		$items          = [];
+		$parentSettings = Setting::find()->where(['parent_id' => 0])->orderBy(['sort_order' => SORT_ASC])->all();
+		foreach ($parentSettings as $parentSetting) {
+			$items[] = [
+				'label'   => $parentSetting->name,
+				'content' => $parentSetting->getContent(),
+			];
+		}
+		return $items;
+	}
+
+	public function getContent() {
+		/**@var $settings self[] */
+		$settings = $this->find()->where(['parent_id' => $this->id])->orderBy(['sort_order' => SORT_ASC])->all();
+		foreach ($settings as $setting) {
+			'<div class="form-group">
+										<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Text Field </label>
+
+										<div class="col-sm-9">
+											<input type="text" id="form-field-1" placeholder="Username" class="col-xs-10 col-sm-5">
+										</div>
+									</div>';
+		}
+	}
 }
