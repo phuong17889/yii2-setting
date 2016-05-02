@@ -1,9 +1,9 @@
 <?php
 
-namespace itzen\setting\models;
+namespace navatech\setting\models;
 
 use Yii;
-use itzen\setting\Module;
+use navatech\setting\Module;
 
 /**
  * This is the model class for table "setting".

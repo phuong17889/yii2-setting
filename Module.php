@@ -1,11 +1,11 @@
 <?php
 
-namespace itzen\setting;
+namespace navatech\setting;
 use Yii;
 
 class Module extends \yii\base\Module
 {
-    public $controllerNamespace = 'itzen\setting\controllers';
+    public $controllerNamespace = 'navatech\setting\controllers';
 
     protected $_isBackend;
 
@@ -13,7 +13,7 @@ class Module extends \yii\base\Module
     {
         parent::init();
 
-        $this->setViewPath('@itzen/setting/views');
+        $this->setViewPath('@navatech/setting/views');
     }
 
     /**

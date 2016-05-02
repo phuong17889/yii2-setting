@@ -1,9 +1,9 @@
 <?php
 
-namespace itzen\setting;
+namespace navatech\setting;
 
 use Yii;
-use itzen\setting\models\Setting as SettingModel;
+use navatech\setting\models\Setting as SettingModel;
 
 class Setting extends \yii\base\Component
 {

@@ -1,0 +1,22 @@
+<?php
+return [
+	'Create '      => 'Thêm mới ',
+	'Create'       => 'Thêm mới',
+	'Update '      => 'Cập nhật ',
+	'Update'       => 'Cập nhật',
+	'Delete'       => 'Xóa',
+	'Setting'      => 'Cấu hình',
+	'info'         => 'Thông tin',
+	'basic'        => 'Cơ bản',
+	'smtp'         => 'SMTP',
+	'siteName'     => 'Tên Website',
+	'siteTitle'    => 'Tiêu đề Website',
+	'siteKeyword'  => 'Từ khóa Website',
+	'timezone'     => 'Múi giờ',
+	'commentCheck' => 'Kiểm tra bình luận',
+	'smtpHost'     => 'SMTP Host',
+	'smtpPort'     => 'SMTP Port',
+	'smtpUser'     => 'SMTP User',
+	'smtpPassword' => 'SMTP Password',
+	'smtpMail'     => 'SMTP Mail',
+];

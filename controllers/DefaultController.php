@@ -1,8 +1,8 @@
 <?php
 
-namespace itzen\setting\controllers;
+namespace navatech\setting\controllers;
 
-use itzen\setting\models\Setting;
+use navatech\setting\models\Setting;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\web\Controller;

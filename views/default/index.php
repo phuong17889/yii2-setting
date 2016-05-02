@@ -1,10 +1,11 @@
 <?php
-
+use kartik\select2\Select2;
 use yii\helpers\Html;
+use yii\imperavi\Widget;
 use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
-use itzen\setting\models\Setting;
-use itzen\setting\Module;
+use navatech\setting\models\Setting;
+use navatech\setting\Module;
 
 /* @var $this yii\web\View */
 
@@ -50,7 +51,7 @@ foreach ($settingParent as $parent) {
             //            ]);
 
 
-            $str .= \kartik\select2\Select2::widget([
+            $str .= Select2::widget([
                 'name' => "Setting[$child->code]",
                 'value' => $child->value,
                 //'data' => $options,
@@ -82,8 +83,8 @@ foreach ($settingParent as $parent) {
             foreach ($arrayOptions as $option) {
                 $options[$option] = $option;
             }
-            \itzen\setting\RedactorPlugins::register($this);
-            $str .= '<div class="row"><div class="col-lg-8">' . \yii\imperavi\Widget::widget([
+            \navatech\setting\RedactorPlugins::register($this);
+            $str .= '<div class="row"><div class="col-lg-8">' . Widget::widget([
                         'id' => \yii\helpers\Inflector::slug($child->code),
                         'attribute' => "Setting[$child->code]",
                         'value' => $child->value,

@@ -1,6 +1,6 @@
 <?php
 
-namespace itzen\setting;
+namespace navatech\setting;
 
 
 use yii\web\AssetBundle;
@@ -10,7 +10,7 @@ class RedactorPlugins extends AssetBundle
 //    public $basePath = '@webroot';
 //    public $baseUrl = '@web';
 
-    public $sourcePath = '@vendor/itzen/yii2-setting/assets';
+    public $sourcePath = '@vendor/navatech/yii2-setting/assets';
 
     public $publishOptions = [
         'forceCopy' => true,

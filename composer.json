@@ -21,7 +21,9 @@
 	"require": {
 		"yiisoft/yii2": "*",
 		"yiisoft/yii2-bootstrap" : "*",
-		"kartik-v/yii2-tabs-x" : "@dev"
+		"asofter/yii2-imperavi-redactor": "*",
+		"kartik-v/yii2-tabs-x" : "@dev",
+		"kartik-v/yii2-widget-select2": "@dev"
 	},
 	"autoload": {
 		"psr-4": {
