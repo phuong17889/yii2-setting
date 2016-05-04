@@ -14,6 +14,7 @@ use yii\web\Controller;
  */
 class DefaultController extends Controller {
 
+	//TODO cần viết thêm role ở đây, viết thêm hàm update
 	/**
 	 * {@inheritDoc}
 	 */
@@ -38,9 +39,9 @@ class DefaultController extends Controller {
 	}
 
 	public function actionIndex() {
-		if (Yii::$app->request->isPost) {
+		if(Yii::$app->request->isPost) {
 			$setting = Yii::$app->request->post('Setting');
-			foreach ($setting as $key => $value) {
+			foreach($setting as $key => $value) {
 				Setting::updateAll(['value' => $value], ['code' => $key]);
 			}
 			Yii::$app->session->setFlash('alert', [
@@ -50,25 +51,13 @@ class DefaultController extends Controller {
 			$tabHash = Yii::$app->request->post('tabHash', '');
 			return $this->refresh($tabHash);
 		}
-		/**@var $settings Setting[] */
-		$settings  = Setting::find()->where(['parent_id' => 0])->orderBy(['sort_order' => SORT_ASC])->all();
-		$parentTab = [];
-		foreach ($settings as $setting) {
-			if (Module::hasMultiLanguage()) {
-				$code                    = $setting->code;
-				$parentTab[$setting->id] = [
-					'label'   => Translate::$code(),
-					'content' => $setting->getContent(),
-				];
-			} else {
-				$parentTab[$setting->id] = [
-					'label'   => $setting->name,
-					'content' => $setting->getContent(),
-				];
-			}
+		if(Module::hasMultiLanguage()) {
+			$title = Translate::setting();
+		} else {
+			$title = 'Setting';
 		}
 		return $this->render('index', [
-			'parentTab' => $parentTab,
+			'title' => $title,
 		]);
 	}
 }

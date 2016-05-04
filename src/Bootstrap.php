@@ -1,6 +1,7 @@
 <?php
 namespace navatech\setting;
 
+use yii\base\Application;
 use yii\base\BootstrapInterface;
 
 /**
@@ -9,19 +10,11 @@ use yii\base\BootstrapInterface;
 class Bootstrap implements BootstrapInterface {
 
 	/**
-	 * @inheritdoc
+	 * Bootstrap method to be called during application bootstrap stage.
+	 *
+	 * @param Application $app the application currently running
 	 */
 	public function bootstrap($app) {
-		// Add module I18N category.
-		if (!isset($app->i18n->translations['setting'])) {
-			$app->i18n->translations['setting'] = [
-				'class'            => 'yii\i18n\PhpMessageSource',
-				'basePath'         => '@navatech/setting/messages',
-				'forceTranslation' => true,
-				'fileMap'          => [
-					'navatech/setting' => 'setting.php',
-				],
-			];
-		}
+		// TODO: cần set lại alias, viết thêm hàm gen ra biến giống như multi language
 	}
 }

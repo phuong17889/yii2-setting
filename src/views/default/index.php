@@ -1,21 +1,34 @@
 <?php
 use kartik\tabs\TabsX;
 use navatech\setting\models\Setting;
-use navatech\setting\Module;
-use yii\bootstrap\ActiveForm;
 use yii\web\View;
 
 /**
- * @var $this          View
- * @var $settingParent Setting[]
- * @var $children      Setting[]
+ * @var $this  View
+ * @var $title string
  */
-$this->title                   = Module::t('setting', 'Setting');
+$this->title                   = $title;
 $this->params['breadcrumbs'][] = $this->title;
 $items                         = [];
+?>
+<div class="col-sm-offset-9 col-sm-3">
+	<div class="form-inline pull-right">
+		<label class="control-label">Edit mode</label>
+		<?php
+		echo \kartik\widgets\SwitchInput::widget([
+			'name'          => 'edit_mode',
+			'pluginOptions' => [
+				'size' => 'small',
+			],
+		])
+		?>
+	</div>
+</div>
+<?php
 echo TabsX::widget([
 	'items'        => Setting::getItems(),
 	'bordered'     => true,
 	'position'     => TabsX::POS_ABOVE,
 	'encodeLabels' => false,
 ]);
+?>
