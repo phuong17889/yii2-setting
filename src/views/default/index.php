@@ -12,24 +12,10 @@ use yii\web\View;
  */
 $this->title                   = Module::t('setting', 'Setting');
 $this->params['breadcrumbs'][] = $this->title;
-$form                          = ActiveForm::begin([
-	'id' => 'setting',
-]);
 $items                         = [];
-
 echo TabsX::widget([
-	'items'        => [
-		[
-			'label'   => '<i class="glyphicon glyphicon-home"></i> Home',
-			'content' => 'sdfsdf',
-		],
-		[
-			'label'   => '<i class="glyphicon glyphicon-user"></i> Profile',
-			'content' => 'sdfsdfsdf',
-		],
-	],
+	'items'        => Setting::getItems(),
 	'bordered'     => true,
 	'position'     => TabsX::POS_ABOVE,
 	'encodeLabels' => false,
 ]);
-ActiveForm::end();
