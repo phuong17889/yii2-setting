@@ -1,7 +1,7 @@
 <?php
 use kartik\tabs\TabsX;
-use kartik\widgets\SwitchInput;
 use navatech\setting\models\Setting;
+use yii\bootstrap\Html;
 use yii\web\View;
 
 /**
@@ -11,18 +11,14 @@ use yii\web\View;
 $this->title                   = $title;
 $this->params['breadcrumbs'][] = $this->title;
 $items                         = [];
-?>
-<div class="col-sm-offset-9 col-sm-3">
-	<div class="form-inline pull-right">
-		<label class="control-label">Edit mode</label>
-		<?= SwitchInput::widget([
-			'name'          => 'edit_mode',
-			'pluginOptions' => [
-				'size' => 'small',
-			],
-		]) ?>
+if (YII_DEBUG):
+	?>
+	<div class="col-sm-offset-9 col-sm-3">
+		<div class="form-inline pull-right">
+			<?= Html::a('Configure', ['config/index'], ['class' => 'btn btn-primary']) ?>
+		</div>
 	</div>
-</div>
+<?php endif; ?>
 <?= TabsX::widget([
 	'items'        => Setting::getItems(),
 	'bordered'     => true,

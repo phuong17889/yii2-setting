@@ -17,11 +17,11 @@ class Setting extends Component {
 	 * @return null|string
 	 */
 	public function get($code, $default = null) {
-		if(!$code) {
+		if (!$code) {
 			return $default;
 		}
 		$setting = SettingModel::findOne(['code' => $code]);
-		if($setting) {
+		if ($setting) {
 			return $setting->value;
 		} else {
 			return $default;
@@ -29,16 +29,11 @@ class Setting extends Component {
 	}
 
 	/**
-	 * @param string $name
+	 * @param string $code
 	 *
 	 * @return string
 	 */
-	public function __get($name) {
-		$setting = SettingModel::findOne(['code' => $name]);
-		if($setting) {
-			return $setting->value;
-		} else {
-			return '';
-		}
+	public function __get($code) {
+		return $this->get($code);
 	}
 }

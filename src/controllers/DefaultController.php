@@ -10,6 +10,7 @@ use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
+use yii\web\UploadedFile;
 
 /**
  * {@inheritDoc}
@@ -65,8 +66,17 @@ class DefaultController extends Controller {
 	}
 
 	public function actionIndex() {
+		//TODO kiểm tra lại việc upload tệp
 		if (Yii::$app->request->isPost) {
 			$setting = Yii::$app->request->post('Setting');
+			if (isset($_FILES['Setting'])) {
+				foreach ($_FILES['Setting']['name'] as $key => $value) {
+					$model       = Setting::findOne(['code' => $key]);
+					$model->file = UploadedFile::getInstance($model, $key);
+					$model->upload();
+					$model->updateAttributes(['value' => $value]);
+				}
+			}
 			foreach ($setting as $key => $value) {
 				if ($value !== '') {
 					Setting::updateAll(['value' => $value], ['code' => $key]);

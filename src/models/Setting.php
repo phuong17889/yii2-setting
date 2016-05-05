@@ -17,6 +17,7 @@ use Yii;
 use yii\bootstrap\Html;
 use yii\db\ActiveRecord;
 use yii\helpers\Url;
+use yii\web\UploadedFile;
 
 /**
  * This is the model class for table "setting".
@@ -34,43 +35,45 @@ use yii\helpers\Url;
  */
 class Setting extends ActiveRecord {
 
-	const TYPE_GROUP       = 0;
+	const TYPE_GROUP        = 0;
 
-	const TYPE_TEXT        = 1;
+	const TYPE_TEXT         = 1;
 
-	const TYPE_EMAIL       = 2;
+	const TYPE_EMAIL        = 2;
 
-	const TYPE_NUMBER      = 3;
+	const TYPE_NUMBER       = 3;
 
-	const TYPE_TEXTAREA    = 4;
+	const TYPE_TEXTAREA     = 4;
 
-	const TYPE_COLOR       = 5;
+	const TYPE_COLOR        = 5;
 
-	const TYPE_DATE        = 6;
+	const TYPE_DATE         = 6;
 
-	const TYPE_TIME        = 7;
+	const TYPE_TIME         = 7;
 
-	const TYPE_DATETIME    = 8;
+	const TYPE_DATETIME     = 8;
 
-	const TYPE_PASSWORD    = 9;
+	const TYPE_PASSWORD     = 9;
 
-	const TYPE_ROXYMCE     = 10;
+	const TYPE_ROXYMCE      = 10;
 
-	const TYPE_SELECT      = 11;
+	const TYPE_SELECT       = 11;
 
-	const TYPE_MULTISELECT = 12;
+	const TYPE_MULTI_SELECT = 12;
 
-	const TYPE_FILE        = 13;
+	const TYPE_FILE_PATH    = 13;
 
-	const TYPE_PERCENT     = 14;
+	const TYPE_FILE_URL     = 14;
 
-	const TYPE_SWITCH      = 15;
+	const TYPE_PERCENT      = 15;
 
-	const TYPE_CHECKBOX    = 16;
+	const TYPE_SWITCH       = 16;
 
-	const TYPE_RADIO       = 17;
+	const TYPE_CHECKBOX     = 17;
 
-	const TYPE             = [
+	const TYPE_RADIO        = 18;
+
+	const TYPE              = [
 		'group',
 		'text',
 		'email',
@@ -85,11 +88,17 @@ class Setting extends ActiveRecord {
 		'select',
 		'multiselect',
 		'file',
+		'url',
 		'percent',
 		'switch',
 		'checkbox',
 		'radio',
 	];
+
+	/**
+	 * @var UploadedFile
+	 */
+	public $file;
 
 	/**
 	 * @inheritdoc
@@ -127,6 +136,11 @@ class Setting extends ActiveRecord {
 				'max' => 32,
 			],
 			[
+				['file'],
+				'file',
+				'skipOnEmpty' => true,
+			],
+			[
 				[
 					'store_range',
 					'store_dir',
@@ -146,7 +160,7 @@ class Setting extends ActiveRecord {
 	public function attributeLabels() {
 		return [
 			'id'          => 'ID',
-			'parent_id'   => 'Parent ID',
+			'parent_id'   => 'Parent Tab',
 			'name'        => 'Name',
 			'code'        => 'Code',
 			'type'        => 'Type',
@@ -168,7 +182,10 @@ class Setting extends ActiveRecord {
 			'type'      => self::TYPE_GROUP,
 		])->orderBy(['sort_order' => SORT_ASC])->all();
 		foreach ($parentSettings as $parentSetting) {
-			$content = Html::beginForm('', 'POST', ['class' => 'form-horizontal']);
+			$content = Html::beginForm('', 'POST', [
+				'class'   => 'form-horizontal',
+				'enctype' => 'multipart/form-data',
+			]);
 			$content .= $parentSetting->getContent();
 			$content .= Html::beginTag('div', ['class' => 'form-group']);
 			$content .= Html::beginTag('div', ['class' => 'col-sm-9 col-sm-offset-3']);
@@ -219,7 +236,7 @@ class Setting extends ActiveRecord {
 			$html .= Html::beginTag('div', ['class' => 'form-group']);
 			$html .= Html::label($setting->getName(), $setting->code, ['class' => 'col-sm-3 control-label no-padding-right']);
 			$html .= Html::beginTag('div', ['class' => 'col-sm-9']);
-			$html .= $setting->getType();
+			$html .= $setting->getItem();
 			$html .= Html::beginTag('span', ['class' => 'help-block']);
 			if (YII_DEBUG && YII_ENV == 'dev') {
 				$html .= '<strong>Yii::$app->setting->' . $setting->code . '</strong><br/>';
@@ -239,7 +256,7 @@ class Setting extends ActiveRecord {
 	 * @return string
 	 * @throws \Exception
 	 */
-	public function getType($options = null, $pluginOptions = null) {
+	public function getItem($options = null, $pluginOptions = null) {
 		switch ($this->type) {
 			case self::TYPE_TEXT:
 				return Html::input('text', 'Setting[' . $this->code . ']', $this->value, $options != null ? $options : [
@@ -320,6 +337,7 @@ class Setting extends ActiveRecord {
 				]);
 			case self::TYPE_ROXYMCE:
 				return RoxyMceWidget::widget([
+					'id'          => 'Setting_' . $this->code,
 					'name'        => 'Setting[' . $this->code . ']',
 					'value'       => $this->value,
 					'action'      => Url::to(['roxymce/default']),
@@ -330,7 +348,8 @@ class Setting extends ActiveRecord {
 				]);
 			case self::TYPE_SELECT:
 				return Select2::widget([
-					'data'          => implode(",", $this->store_range),
+					'name'          => 'Setting[' . $this->code . ']',
+					'data'          => $this->store_range != '' ? explode(",", $this->store_range) : [],
 					'options'       => $options != null ? $options : [
 						'class' => 'form-control',
 					],
@@ -338,19 +357,31 @@ class Setting extends ActiveRecord {
 						'allowClear' => true,
 					],
 				]);
-			case self::TYPE_MULTISELECT:
+			case self::TYPE_MULTI_SELECT:
 				$options['multiple'] = true;
 				if (!isset($options['class'])) {
 					$options['class'] = 'form-control';
 				}
 				return Select2::widget([
-					'data'          => implode(",", $this->store_range),
+					'name'          => 'Setting[' . $this->code . ']',
+					'data'          => $this->store_range != null ? explode(",", $this->store_range) : [],
 					'options'       => $options,
 					'pluginOptions' => [
 						'allowClear' => true,
 					],
 				]);
-			case self::TYPE_FILE:
+			case self::TYPE_FILE_PATH:
+				return FileInput::widget([
+					'name'          => 'Setting[' . $this->code . ']',
+					'value'         => $this->value,
+					'options'       => $options != null ? $options : [
+						'class' => 'form-control',
+					],
+					'pluginOptions' => $pluginOptions != null ? $pluginOptions : [
+						'previewFileType' => 'any',
+					],
+				]);
+			case self::TYPE_FILE_URL:
 				return FileInput::widget([
 					'name'          => 'Setting[' . $this->code . ']',
 					'value'         => $this->value,
@@ -387,11 +418,11 @@ class Setting extends ActiveRecord {
 					],
 				]);
 			case self::TYPE_CHECKBOX:
-				return Html::checkboxList('Setting[' . $this->code . ']', $this->value, implode(',', $this->store_range), $options != null ? $options : [
+				return Html::checkboxList('Setting[' . $this->code . ']', $this->value, $this->store_range != null ? explode(",", $this->store_range) : [], $options != null ? $options : [
 					'class' => 'form-control',
 				]);
 			case self::TYPE_RADIO:
-				return Html::radioList('Setting[' . $this->code . ']', $this->value, implode(',', $this->store_range), $options != null ? $options : [
+				return Html::radioList('Setting[' . $this->code . ']', $this->value, $this->store_range != null ? explode(",", $this->store_range) : [], $options != null ? $options : [
 					'class' => 'form-control',
 				]);
 			default:
@@ -399,6 +430,73 @@ class Setting extends ActiveRecord {
 					'placeholder' => $this->getName(),
 					'class'       => 'form-control',
 				]);
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function afterFind() {
+		parent::afterFind();
+		if ($this->type == self::TYPE_FILE_PATH) {
+			$this->value = Yii::getAlias($this->store_dir) . DIRECTORY_SEPARATOR . $this->value;
+		}
+		if ($this->type == self::TYPE_FILE_URL) {
+			if (Module::isAdvanced()) {
+				/**@var $module Module */
+				$module = Yii::$app->getModule('setting');
+				if ($module->isBackend()) {
+					$store_dir = str_replace('backend/', '', $this->store_dir);
+				} else {
+					$store_dir = str_replace('frontend/', '', $this->store_dir);
+				}
+			} else {
+				$store_dir = str_replace('app/', '', $this->store_dir);
+			}
+			$this->value = Yii::$app->request->hostInfo . Yii::$app->request->baseUrl . Yii::getAlias($store_dir) . '/' . $this->value;
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function beforeSave($insert) {
+		if ($this->parent_id == null) {
+			$this->parent_id = 0;
+		}
+		if (in_array($this->type, [
+			self::TYPE_FILE_PATH,
+			self::TYPE_FILE_URL,
+		])) {
+			if ($this->store_dir == '') {
+				if (Module::isAdvanced()) {
+					/**@var $module Module */
+					$module = Yii::$app->getModule('setting');
+					if ($module->isBackend()) {
+						$this->store_dir = '@backend/web/uploads/setting';
+					} else {
+						$this->store_dir = '@frontend/web/uploads/setting';
+					}
+				} else {
+					$this->store_dir = '@app/web/uploads/setting';
+				}
+			}
+			if (!file_exists(Yii::getAlias($this->store_dir))) {
+				mkdir(Yii::getAlias($this->store_dir), 0777, true);
+			}
+		}
+		return parent::beforeSave($insert);
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function upload() {
+		if ($this->validate()) {
+			$this->file->saveAs($this->store_dir . '/' . $this->file->baseName . '.' . $this->file->extension);
+			return true;
+		} else {
+			return false;
 		}
 	}
 }

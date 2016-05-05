@@ -19,7 +19,7 @@ class Module extends \navatech\base\Module {
 	 *
 	 * @return boolean true if it's used for backend application
 	 */
-	public function getIsBackend() {
+	public function isBackend() {
 		if ($this->_isBackend === null) {
 			$this->_isBackend = strpos($this->controllerNamespace, 'backend') === false ? false : true;
 		}

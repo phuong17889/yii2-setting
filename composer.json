@@ -29,7 +29,6 @@
 		"kartik-v/yii2-password" : "@dev",
 		"kartik-v/yii2-widgets" : "@dev",
 		"kartik-v/yii2-tabs-x" : "@dev",
-		"kartik-v/yii2-checkbox-x" : "@dev",
 		"kartik-v/yii2-grid" : "@dev"
 	},
 	"autoload" : {
