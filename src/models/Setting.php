@@ -116,6 +116,7 @@ class Setting extends ActiveRecord {
 				[
 					'parent_id',
 					'sort_order',
+					'type',
 				],
 				'integer',
 			],
@@ -129,11 +130,6 @@ class Setting extends ActiveRecord {
 			[
 				['value'],
 				'string',
-			],
-			[
-				'type',
-				'string',
-				'max' => 32,
 			],
 			[
 				['file'],
@@ -464,27 +460,6 @@ class Setting extends ActiveRecord {
 		if ($this->parent_id == null) {
 			$this->parent_id = 0;
 		}
-		if (in_array($this->type, [
-			self::TYPE_FILE_PATH,
-			self::TYPE_FILE_URL,
-		])) {
-			if ($this->store_dir == '') {
-				if (Module::isAdvanced()) {
-					/**@var $module Module */
-					$module = Yii::$app->getModule('setting');
-					if ($module->isBackend()) {
-						$this->store_dir = '@backend/web/uploads/setting';
-					} else {
-						$this->store_dir = '@frontend/web/uploads/setting';
-					}
-				} else {
-					$this->store_dir = '@app/web/uploads/setting';
-				}
-			}
-			if (!file_exists(Yii::getAlias($this->store_dir))) {
-				mkdir(Yii::getAlias($this->store_dir), 0777, true);
-			}
-		}
 		return parent::beforeSave($insert);
 	}
 
@@ -493,7 +468,29 @@ class Setting extends ActiveRecord {
 	 */
 	public function upload() {
 		if ($this->validate()) {
-			$this->file->saveAs($this->store_dir . '/' . $this->file->baseName . '.' . $this->file->extension);
+			if (in_array($this->type, [
+				self::TYPE_FILE_PATH,
+				self::TYPE_FILE_URL,
+			])) {
+				if ($this->store_dir == '') {
+					if (Module::isAdvanced()) {
+						/**@var $module Module */
+						$module = Yii::$app->getModule('setting');
+						if ($module->isBackend()) {
+							$this->store_dir = '@backend/web/uploads/setting';
+						} else {
+							$this->store_dir = '@frontend/web/uploads/setting';
+						}
+					} else {
+						$this->store_dir = '@app/web/uploads/setting';
+					}
+				}
+				if (!file_exists(Yii::getAlias($this->store_dir))) {
+					mkdir(Yii::getAlias($this->store_dir), 0777, true);
+				}
+				$this->updateAttributes(['store_dir' => $this->store_dir]);
+			}
+			$this->file->saveAs(Yii::getAlias($this->store_dir) . '/' . $this->file->baseName . '.' . $this->file->extension);
 			return true;
 		} else {
 			return false;

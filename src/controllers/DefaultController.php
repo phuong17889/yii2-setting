@@ -65,16 +65,22 @@ class DefaultController extends Controller {
 		}
 	}
 
+	/**
+	 * @return string|\yii\web\Response
+	 */
 	public function actionIndex() {
-		//TODO kiểm tra lại việc upload tệp
 		if (Yii::$app->request->isPost) {
 			$setting = Yii::$app->request->post('Setting');
 			if (isset($_FILES['Setting'])) {
 				foreach ($_FILES['Setting']['name'] as $key => $value) {
 					$model       = Setting::findOne(['code' => $key]);
 					$model->file = UploadedFile::getInstance($model, $key);
-					$model->upload();
-					$model->updateAttributes(['value' => $value]);
+					if($model->upload()) {
+						$model->updateAttributes(['value' => $value]);
+					}
+					echo '<pre>';
+					print_r($model->getErrors());
+					die;
 				}
 			}
 			foreach ($setting as $key => $value) {
