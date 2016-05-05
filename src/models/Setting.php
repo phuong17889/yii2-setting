@@ -167,7 +167,7 @@ class Setting extends ActiveRecord {
 			'parent_id' => 0,
 			'type'      => self::TYPE_GROUP,
 		])->orderBy(['sort_order' => SORT_ASC])->all();
-		foreach($parentSettings as $parentSetting) {
+		foreach ($parentSettings as $parentSetting) {
 			$content = Html::beginForm('', 'POST', ['class' => 'form-horizontal']);
 			$content .= $parentSetting->getContent();
 			$content .= Html::beginTag('div', ['class' => 'form-group']);
@@ -177,7 +177,7 @@ class Setting extends ActiveRecord {
 			$content .= Html::endTag('div');
 			$content .= Html::endForm();
 			$items[] = [
-				'label'   => $parentSetting->name,
+				'label'   => $parentSetting->getName(),
 				'content' => $content,
 			];
 		}
@@ -188,7 +188,7 @@ class Setting extends ActiveRecord {
 	 * @return string
 	 */
 	public function getName() {
-		if(Module::hasMultiLanguage()) {
+		if (Module::hasMultiLanguage()) {
 			$code = $this->code;
 			return Translate::$code();
 		} else {
@@ -200,7 +200,7 @@ class Setting extends ActiveRecord {
 	 * @return string
 	 */
 	public function getDesc() {
-		if(Module::hasMultiLanguage()) {
+		if (Module::hasMultiLanguage()) {
 			$code = 'desc_' . $this->code;
 			return Translate::$code();
 		} else {
@@ -215,14 +215,14 @@ class Setting extends ActiveRecord {
 		/**@var $settings self[] */
 		$html     = '';
 		$settings = $this->find()->where(['parent_id' => $this->id])->orderBy(['sort_order' => SORT_ASC])->all();
-		foreach($settings as $setting) {
+		foreach ($settings as $setting) {
 			$html .= Html::beginTag('div', ['class' => 'form-group']);
 			$html .= Html::label($setting->getName(), $setting->code, ['class' => 'col-sm-3 control-label no-padding-right']);
 			$html .= Html::beginTag('div', ['class' => 'col-sm-9']);
 			$html .= $setting->getType();
 			$html .= Html::beginTag('span', ['class' => 'help-block']);
-			if(YII_DEBUG && YII_ENV == 'dev') {
-				$html .= '<strong>Yii::$app->setting->' . $setting->code . '</strong>.<br/>';
+			if (YII_DEBUG && YII_ENV == 'dev') {
+				$html .= '<strong>Yii::$app->setting->' . $setting->code . '</strong><br/>';
 			}
 			$html .= $setting->getDesc();
 			$html .= Html::endTag('span');
@@ -240,40 +240,38 @@ class Setting extends ActiveRecord {
 	 * @throws \Exception
 	 */
 	public function getType($options = null, $pluginOptions = null) {
-		switch($this->type) {
+		switch ($this->type) {
 			case self::TYPE_TEXT:
-				return Html::input('text', $this->code, $this->value, $options != null ? $options : [
+				return Html::input('text', 'Setting[' . $this->code . ']', $this->value, $options != null ? $options : [
 					'placeholder' => $this->getName(),
 					'class'       => 'form-control',
 				]);
 			case self::TYPE_EMAIL:
-				return Html::input('email', $this->code, $this->value, $options != null ? $options : [
+				return Html::input('email', 'Setting[' . $this->code . ']', $this->value, $options != null ? $options : [
 					'placeholder' => $this->getName(),
 					'class'       => 'form-control',
 				]);
 			case self::TYPE_NUMBER:
-				return Html::input('number', $this->code, $this->value, $options != null ? $options : [
+				return Html::input('number', 'Setting[' . $this->code . ']', $this->value, $options != null ? $options : [
 					'placeholder' => $this->getName(),
 					'class'       => 'form-control',
 				]);
 			case self::TYPE_TEXTAREA:
-				return Html::textarea($this->code, $this->value, $options != null ? $options : [
+				return Html::textarea('Setting[' . $this->code . ']', $this->value, $options != null ? $options : [
 					'placeholder' => $this->getName(),
 					'class'       => 'form-control',
 				]);
 			case self::TYPE_COLOR:
 				return ColorInput::widget([
-					'id'      => $this->code,
 					'value'   => $this->value,
-					'name'    => $this->code,
+					'name'    => 'Setting[' . $this->code . ']',
 					'options' => $options != null ? $options : [
 						'class' => 'form-control',
 					],
 				]);
 			case self::TYPE_DATE:
 				return DatePicker::widget([
-					'id'            => $this->code,
-					'name'          => $this->code,
+					'name'          => 'Setting[' . $this->code . ']',
 					'value'         => $this->value,
 					'options'       => $options != null ? $options : [
 						'class' => 'form-control',
@@ -285,8 +283,7 @@ class Setting extends ActiveRecord {
 				]);
 			case self::TYPE_TIME:
 				return TimePicker::widget([
-					'id'            => $this->code,
-					'name'          => $this->code,
+					'name'          => 'Setting[' . $this->code . ']',
 					'value'         => $this->value,
 					'options'       => $options != null ? $options : [
 						'class' => 'form-control',
@@ -299,8 +296,7 @@ class Setting extends ActiveRecord {
 				]);
 			case self::TYPE_DATETIME:
 				return DateTimePicker::widget([
-					'id'            => $this->code,
-					'name'          => $this->code,
+					'name'          => 'Setting[' . $this->code . ']',
 					'value'         => $this->value,
 					'options'       => $options != null ? $options : [
 						'class' => 'form-control',
@@ -312,8 +308,7 @@ class Setting extends ActiveRecord {
 				]);
 			case self::TYPE_PASSWORD:
 				return PasswordInput::widget([
-					'id'            => $this->code,
-					'name'          => $this->code,
+					'name'          => 'Setting[' . $this->code . ']',
 					'value'         => $this->value,
 					'options'       => $options != null ? $options : [
 						'class' => 'form-control',
@@ -325,7 +320,7 @@ class Setting extends ActiveRecord {
 				]);
 			case self::TYPE_ROXYMCE:
 				return RoxyMceWidget::widget([
-					'name'        => $this->code,
+					'name'        => 'Setting[' . $this->code . ']',
 					'value'       => $this->value,
 					'action'      => Url::to(['roxymce/default']),
 					'options'     => $options != null ? $options : [
@@ -345,7 +340,7 @@ class Setting extends ActiveRecord {
 				]);
 			case self::TYPE_MULTISELECT:
 				$options['multiple'] = true;
-				if(!isset($options['class'])) {
+				if (!isset($options['class'])) {
 					$options['class'] = 'form-control';
 				}
 				return Select2::widget([
@@ -357,8 +352,7 @@ class Setting extends ActiveRecord {
 				]);
 			case self::TYPE_FILE:
 				return FileInput::widget([
-					'id'            => $this->code,
-					'name'          => $this->code,
+					'name'          => 'Setting[' . $this->code . ']',
 					'value'         => $this->value,
 					'options'       => $options != null ? $options : [
 						'class' => 'form-control',
@@ -369,7 +363,7 @@ class Setting extends ActiveRecord {
 				]);
 			case self::TYPE_PERCENT:
 				return RangeInput::widget([
-					'name'         => $this->code,
+					'name'         => 'Setting[' . $this->code . ']',
 					'value'        => $this->value,
 					'html5Options' => [
 						'min'  => 0,
@@ -383,8 +377,7 @@ class Setting extends ActiveRecord {
 				]);
 			case self::TYPE_SWITCH:
 				return SwitchInput::widget([
-					'id'            => $this->code,
-					'name'          => $this->code,
+					'name'          => 'Setting[' . $this->code . ']',
 					'value'         => $this->value,
 					'options'       => $options != null ? $options : [
 						'class' => 'form-control',
@@ -394,13 +387,15 @@ class Setting extends ActiveRecord {
 					],
 				]);
 			case self::TYPE_CHECKBOX:
-				return true;
+				return Html::checkboxList('Setting[' . $this->code . ']', $this->value, implode(',', $this->store_range), $options != null ? $options : [
+					'class' => 'form-control',
+				]);
 			case self::TYPE_RADIO:
-				return Html::radioList($this->code, $this->value, implode(',', $this->store_range), $options != null ? $options : [
+				return Html::radioList('Setting[' . $this->code . ']', $this->value, implode(',', $this->store_range), $options != null ? $options : [
 					'class' => 'form-control',
 				]);
 			default:
-				return Html::input('text', $this->code, $this->value, $options != null ? $options : [
+				return Html::input('text', 'Setting[' . $this->code . ']', $this->value, $options != null ? $options : [
 					'placeholder' => $this->getName(),
 					'class'       => 'form-control',
 				]);

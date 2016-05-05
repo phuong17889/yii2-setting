@@ -5,6 +5,9 @@ use navatech\setting\models\Setting as SettingModel;
 use Yii;
 use yii\base\Component;
 
+/**
+ * {@inheritDoc}
+ */
 class Setting extends Component {
 
 	/**

@@ -1,7 +1,6 @@
 <?php
 use kartik\tabs\TabsX;
 use kartik\widgets\SwitchInput;
-use navatech\setting\models\Setting;
 use yii\web\View;
 
 /**
@@ -17,15 +16,10 @@ $items                         = [];
 		<label class="control-label">Edit mode</label>
 		<?= SwitchInput::widget([
 			'name'          => 'edit_mode',
+			'value'         => true,
 			'pluginOptions' => [
 				'size' => 'small',
 			],
 		]) ?>
 	</div>
 </div>
-<?= TabsX::widget([
-	'items'        => Setting::getItems(),
-	'bordered'     => true,
-	'position'     => TabsX::POS_ABOVE,
-	'encodeLabels' => false,
-]); ?>

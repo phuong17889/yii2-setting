@@ -2,11 +2,13 @@
 namespace navatech\setting\controllers;
 
 use navatech\language\Translate;
+use navatech\role\filters\RoleFilter;
 use navatech\setting\models\Setting;
 use navatech\setting\Module;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 
 /**
@@ -14,12 +16,11 @@ use yii\web\Controller;
  */
 class DefaultController extends Controller {
 
-	//TODO cần viết thêm role ở đây, viết thêm hàm update
 	/**
 	 * {@inheritDoc}
 	 */
 	public function behaviors() {
-		return [
+		$behaviors = [
 			'verbs'  => [
 				'class'   => VerbFilter::className(),
 				'actions' => [
@@ -36,22 +37,49 @@ class DefaultController extends Controller {
 				],
 			],
 		];
+		if (Module::hasUserRole()) {
+			if (Module::hasMultiLanguage()) {
+				return ArrayHelper::merge($behaviors, [
+					'role' => [
+						'class'   => RoleFilter::className(),
+						'name'    => Translate::setting(),
+						'actions' => [
+							'index' => Translate::index(),
+						],
+					],
+				]);
+			} else {
+				return ArrayHelper::merge($behaviors, [
+					'role' => [
+						'class'   => RoleFilter::className(),
+						'name'    => 'Setting',
+						'actions' => [
+							'index' => 'Index',
+						],
+					],
+				]);
+			}
+		} else {
+			return $behaviors;
+		}
 	}
 
 	public function actionIndex() {
-		if(Yii::$app->request->isPost) {
+		if (Yii::$app->request->isPost) {
 			$setting = Yii::$app->request->post('Setting');
-			foreach($setting as $key => $value) {
-				Setting::updateAll(['value' => $value], ['code' => $key]);
+			foreach ($setting as $key => $value) {
+				if ($value !== '') {
+					Setting::updateAll(['value' => $value], ['code' => $key]);
+				}
 			}
 			Yii::$app->session->setFlash('alert', [
-				'body'    => \Yii::t('backend', 'Settings has been successfully saved'),
+				'body'    => 'Settings has been successfully saved',
 				'options' => ['class' => 'alert-success'],
 			]);
 			$tabHash = Yii::$app->request->post('tabHash', '');
 			return $this->refresh($tabHash);
 		}
-		if(Module::hasMultiLanguage()) {
+		if (Module::hasMultiLanguage()) {
 			$title = Translate::setting();
 		} else {
 			$title = 'Setting';
