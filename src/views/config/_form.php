@@ -57,7 +57,10 @@ use yii\widgets\ActiveForm;
 
 	<?= $form->field($model, 'value')->textarea(['rows' => 6]) ?>
 
-	<?= $form->field($model, 'sort_order')->textInput(['type' => 'number']) ?>
+	<?= $form->field($model, 'sort_order')->textInput([
+		'type'  => 'number',
+		'value' => $model->isNewRecord ? 1 : $model->sort_order,
+	]) ?>
 
 	<div class="form-group">
 		<?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

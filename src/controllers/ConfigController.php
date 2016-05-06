@@ -28,6 +28,17 @@ class ConfigController extends Controller {
 	}
 
 	/**
+	 * {@inheritDoc}
+	 */
+	public function beforeAction($action) {
+		if (YII_ENV_DEV) {
+			return parent::beforeAction($action);
+		} else {
+			throw new NotFoundHttpException('The requested page does not exist.');
+		}
+	}
+
+	/**
 	 * Lists all Setting models.
 	 * @return mixed
 	 */

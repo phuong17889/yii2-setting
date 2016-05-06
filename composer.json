@@ -7,7 +7,7 @@
 		"extension",
 		"setting"
 	],
-	"license" : "Apache-2.0",
+	"license" : "MIT",
 	"authors" : [
 		{
 			"name" : "Funson Lee",
@@ -22,6 +22,10 @@
 			"email" : "phuong17889@gmail.com"
 		}
 	],
+	"homepage" : "https://navatech.vn",
+	"support" : {
+		"source" : "https://github.com/navatech/yii2-setting"
+	},
 	"require" : {
 		"php" : ">=5.6.0",
 		"navatech/yii2-navatech-base" : "@dev",
