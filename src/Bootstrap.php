@@ -15,7 +15,5 @@ class Bootstrap implements BootstrapInterface {
 	 * @param Application $app the application currently running
 	 */
 	public function bootstrap($app) {
-		// TODO: cần set lại alias, viết thêm hàm gen ra biến giống như multi language
-//		\Yii::setAlias('@setting')
 	}
 }
