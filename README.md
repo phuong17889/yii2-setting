@@ -47,11 +47,17 @@ yii migrate --migrationPath=@navatech/setting/migrations
 ### Config backend modules in backend/config/main.php to manage settings
 
 ```php
-    'modules' => [
-        'setting' => [
-            'class' => 'navatech\setting\Module',
-            'controllerNamespace' => 'navatech\setting\controllers'
-        ],
+    'modules'    => [
+   		'setting'  => [
+            'class'               => 'navatech\setting\Module',
+            'controllerNamespace' => 'navatech\setting\controllers',
+   		],
+   		'gridview' => [
+            'class' => '\kartik\grid\Module',
+   		],
+   		'roxymce'  => [
+            'class' => '\navatech\roxymce\Module',
+   		],
     ],
 ```
 

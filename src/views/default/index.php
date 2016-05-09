@@ -1,5 +1,6 @@
 <?php
 use kartik\tabs\TabsX;
+use kartik\widgets\AlertBlock;
 use navatech\setting\models\Setting;
 use yii\bootstrap\Html;
 use yii\web\View;
@@ -11,6 +12,10 @@ use yii\web\View;
 $this->title                   = $title;
 $this->params['breadcrumbs'][] = $this->title;
 $items                         = [];
+echo AlertBlock::widget([
+	'type'            => AlertBlock::TYPE_ALERT,
+	'useSessionFlash' => true,
+]);
 if (YII_DEBUG):
 	?>
 	<div class="col-sm-offset-9 col-sm-3">

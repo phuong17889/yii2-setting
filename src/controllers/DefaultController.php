@@ -10,6 +10,7 @@ use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
+use yii\web\Response;
 use yii\web\UploadedFile;
 
 /**
@@ -66,7 +67,7 @@ class DefaultController extends Controller {
 	}
 
 	/**
-	 * @return string|\yii\web\Response
+	 * @return string|Response
 	 */
 	public function actionIndex() {
 		if (Yii::$app->request->isPost) {
@@ -75,25 +76,24 @@ class DefaultController extends Controller {
 				foreach ($_FILES['Setting']['name'] as $key => $value) {
 					$model       = Setting::findOne(['code' => $key]);
 					$model->file = UploadedFile::getInstance($model, $key);
-					if($model->upload()) {
+					if ($model->file != null && $model->upload()) {
 						$model->updateAttributes(['value' => $value]);
 					}
-					echo '<pre>';
-					print_r($model->getErrors());
-					die;
 				}
 			}
 			foreach ($setting as $key => $value) {
-				if ($value !== '') {
-					Setting::updateAll(['value' => $value], ['code' => $key]);
+				if ($value !== '' || $value != null) {
+					if (is_array($value)) {
+						Setting::updateAll(['value' => implode(",", $value)], ['code' => $key]);
+					} else {
+						Setting::updateAll(['value' => $value], ['code' => $key]);
+					}
 				}
 			}
 			Yii::$app->session->setFlash('alert', [
 				'body'    => 'Settings has been successfully saved',
 				'options' => ['class' => 'alert-success'],
 			]);
-			$tabHash = Yii::$app->request->post('tabHash', '');
-			return $this->refresh($tabHash);
 		}
 		if (Module::hasMultiLanguage()) {
 			$title = Translate::setting();
@@ -101,7 +101,7 @@ class DefaultController extends Controller {
 			$title = 'Setting';
 		}
 		return $this->render('index', [
-			'title' => $title,
+			'title'   => $title,
 		]);
 	}
 }

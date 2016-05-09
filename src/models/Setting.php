@@ -344,8 +344,9 @@ class Setting extends ActiveRecord {
 				]);
 			case self::TYPE_SELECT:
 				return Select2::widget([
+					'value'         => $this->value,
 					'name'          => 'Setting[' . $this->code . ']',
-					'data'          => $this->store_range != '' ? explode(",", $this->store_range) : [],
+					'data'          => $this->getStoreRange(),
 					'options'       => $options != null ? $options : [
 						'class' => 'form-control',
 					],
@@ -360,7 +361,7 @@ class Setting extends ActiveRecord {
 				}
 				return Select2::widget([
 					'name'          => 'Setting[' . $this->code . ']',
-					'data'          => $this->store_range != null ? explode(",", $this->store_range) : [],
+					'data'          => $this->getStoreRange(),
 					'options'       => $options,
 					'pluginOptions' => [
 						'allowClear' => true,
@@ -371,10 +372,16 @@ class Setting extends ActiveRecord {
 					'name'          => 'Setting[' . $this->code . ']',
 					'value'         => $this->value,
 					'options'       => $options != null ? $options : [
-						'class' => 'form-control',
+						'class'    => 'form-control',
+						'multiple' => false,
 					],
 					'pluginOptions' => $pluginOptions != null ? $pluginOptions : [
 						'previewFileType' => 'any',
+						'initialPreview'  => !$this->isNewRecord ? [
+							Html::img($this->value, [
+								'class' => 'file-preview-image',
+							]),
+						] : [],
 					],
 				]);
 			case self::TYPE_FILE_URL:
@@ -386,6 +393,11 @@ class Setting extends ActiveRecord {
 					],
 					'pluginOptions' => $pluginOptions != null ? $pluginOptions : [
 						'previewFileType' => 'any',
+						'initialPreview'  => !$this->isNewRecord ? [
+							Html::img($this->value, [
+								'class' => 'file-preview-image',
+							]),
+						] : [],
 					],
 				]);
 			case self::TYPE_PERCENT:
@@ -414,11 +426,11 @@ class Setting extends ActiveRecord {
 					],
 				]);
 			case self::TYPE_CHECKBOX:
-				return Html::checkboxList('Setting[' . $this->code . ']', $this->value, $this->store_range != null ? explode(",", $this->store_range) : [], $options != null ? $options : [
+				return Html::checkboxList('Setting[' . $this->code . ']', $this->value, $this->getStoreRange(), $options != null ? $options : [
 					'class' => 'form-control',
 				]);
 			case self::TYPE_RADIO:
-				return Html::radioList('Setting[' . $this->code . ']', $this->value, $this->store_range != null ? explode(",", $this->store_range) : [], $options != null ? $options : [
+				return Html::radioList('Setting[' . $this->code . ']', $this->value, $this->getStoreRange(), $options != null ? $options : [
 					'class' => 'form-control',
 				]);
 			default:
@@ -427,6 +439,19 @@ class Setting extends ActiveRecord {
 					'class'       => 'form-control',
 				]);
 		}
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getStoreRange() {
+		$response = [];
+		if ($this->store_range != '' || $this->store_range != null) {
+			foreach (explode(",", $this->store_range) as $store_range) {
+				$response[$store_range] = $store_range;
+			}
+		}
+		return $response;
 	}
 
 	/**
@@ -450,6 +475,13 @@ class Setting extends ActiveRecord {
 				$store_dir = str_replace('app/', '', $this->store_dir);
 			}
 			$this->value = Yii::$app->request->hostInfo . Yii::$app->request->baseUrl . Yii::getAlias($store_dir) . '/' . $this->value;
+		}
+		if (in_array($this->type, [
+				self::TYPE_CHECKBOX,
+				self::TYPE_MULTI_SELECT,
+			]) && $this->value != ''
+		) {
+			$this->value = explode(",", $this->value);
 		}
 	}
 

@@ -47,7 +47,7 @@ use yii\widgets\ActiveForm;
 
 	<?= $form->field($model, 'store_range')->textInput([
 		'maxlength'   => true,
-		'placeholder' => 'Required if type in (select, multiselect, checkbox, radio). Example: 1,2,3 or "A","B","C"',
+		'placeholder' => 'Required if type in (select, multiselect, checkbox, radio). Example: 1,2,3 or A,bcd,ef',
 	]) ?>
 
 	<?= $form->field($model, 'store_dir')->textInput([
