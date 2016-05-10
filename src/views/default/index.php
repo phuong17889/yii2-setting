@@ -1,6 +1,7 @@
 <?php
 use kartik\tabs\TabsX;
 use kartik\widgets\AlertBlock;
+use navatech\base\assets\AwesomeBootstrapCheckboxAsset;
 use navatech\setting\models\Setting;
 use yii\bootstrap\Html;
 use yii\web\View;
@@ -9,6 +10,7 @@ use yii\web\View;
  * @var $this  View
  * @var $title string
  */
+AwesomeBootstrapCheckboxAsset::register($this);
 $this->title                   = $title;
 $this->params['breadcrumbs'][] = $this->title;
 $items                         = [];
