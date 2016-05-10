@@ -28,6 +28,7 @@
 	},
 	"require" : {
 		"php" : ">=5.6.0",
+		"bower-asset/awesome-bootstrap-checkbox" : "*",
 		"navatech/yii2-navatech-base" : "@dev",
 		"navatech/yii2-roxymce" : "@dev",
 		"kartik-v/yii2-password" : "@dev",
