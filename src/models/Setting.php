@@ -14,6 +14,7 @@ use navatech\language\Translate;
 use navatech\roxymce\widgets\RoxyMceWidget;
 use navatech\setting\Module;
 use Yii;
+use yii\base\ErrorException;
 use yii\bootstrap\Html;
 use yii\db\ActiveRecord;
 use yii\helpers\Url;
@@ -231,7 +232,7 @@ class Setting extends ActiveRecord {
 		foreach ($settings as $setting) {
 			$html .= Html::beginTag('div', ['class' => 'form-group']);
 			$html .= Html::label($setting->getName(), $setting->code, ['class' => 'col-sm-3 control-label no-padding-right']);
-			$html .= Html::beginTag('div', ['class' => 'col-sm-9']);
+			$html .= Html::beginTag('div', ['class' => 'col-sm-6']);
 			$html .= $setting->getItem();
 			$html .= Html::beginTag('span', ['class' => 'help-block']);
 			if (YII_DEBUG && YII_ENV == 'dev') {
@@ -361,6 +362,7 @@ class Setting extends ActiveRecord {
 				}
 				return Select2::widget([
 					'name'          => 'Setting[' . $this->code . ']',
+					'value'         => explode(",", $this->value),
 					'data'          => $this->getStoreRange(),
 					'options'       => $options,
 					'pluginOptions' => [
@@ -368,9 +370,10 @@ class Setting extends ActiveRecord {
 					],
 				]);
 			case self::TYPE_FILE_PATH:
+				$value = Yii::getAlias($this->store_dir) . DIRECTORY_SEPARATOR . $this->value;
 				return FileInput::widget([
 					'name'          => 'Setting[' . $this->code . ']',
-					'value'         => $this->value,
+					'value'         => $value,
 					'options'       => $options != null ? $options : [
 						'class'    => 'form-control',
 						'multiple' => false,
@@ -385,9 +388,21 @@ class Setting extends ActiveRecord {
 					],
 				]);
 			case self::TYPE_FILE_URL:
+				if (Module::isAdvanced()) {
+					/**@var $module Module */
+					$module = Yii::$app->getModule('setting');
+					if ($module->isBackend()) {
+						$store_dir = str_replace('backend/', '', $this->store_dir);
+					} else {
+						$store_dir = str_replace('frontend/', '', $this->store_dir);
+					}
+				} else {
+					$store_dir = str_replace('app/', '', $this->store_dir);
+				}
+				$value = Yii::$app->request->hostInfo . Yii::$app->request->baseUrl . Yii::getAlias($store_dir) . '/' . $this->value;
 				return FileInput::widget([
 					'name'          => 'Setting[' . $this->code . ']',
-					'value'         => $this->value,
+					'value'         => $value,
 					'options'       => $options != null ? $options : [
 						'class' => 'form-control',
 					],
@@ -415,23 +430,41 @@ class Setting extends ActiveRecord {
 					'addon'        => ['append' => ['content' => '%']],
 				]);
 			case self::TYPE_SWITCH:
+				$selector = explode(',', $this->store_range);
+				if (count($selector) != 2) {
+					throw new ErrorException('Switch Field should have 2 store range, and negative is first. Example: no,yes', 500);
+				}
 				return SwitchInput::widget([
-					'name'          => 'Setting[' . $this->code . ']',
-					'value'         => $this->value,
-					'options'       => $options != null ? $options : [
-						'class' => 'form-control',
+					'name'             => 'Setting[' . $this->code . ']',
+					'value'            => $this->value,
+					'containerOptions' => [
+						'class' => 'nv-switch-container',
 					],
-					'pluginOptions' => $pluginOptions != null ? $pluginOptions : [
-						'size' => 'small',
+					'options'          => $options != null ? $options : [
+					],
+					'pluginOptions'    => $pluginOptions != null ? $pluginOptions : [
+						'size'    => 'small',
+						'offText' => ucfirst($selector[0]),
+						'onText'  => ucfirst($selector[1]),
 					],
 				]);
 			case self::TYPE_CHECKBOX:
-				return Html::checkboxList('Setting[' . $this->code . ']', $this->value, $this->getStoreRange(), $options != null ? $options : [
-					'class' => 'form-control',
+				return Html::checkboxList('Setting[' . $this->code . ']', explode(",", $this->value), $this->getStoreRange(), $options != null ? $options : [
+					'class'       => 'nv-checkbox-list',
+					'itemOptions' => [
+						'labelOptions' => [
+							'class' => 'nv-checkbox nv-checkbox-outline',
+						],
+					],
 				]);
 			case self::TYPE_RADIO:
 				return Html::radioList('Setting[' . $this->code . ']', $this->value, $this->getStoreRange(), $options != null ? $options : [
-					'class' => 'form-control',
+					'class'       => 'nv-radio-list',
+					'itemOptions' => [
+						'labelOptions' => [
+							'class' => 'nv-radio nv-radio-outline',
+						],
+					],
 				]);
 			default:
 				return Html::input('text', 'Setting[' . $this->code . ']', $this->value, $options != null ? $options : [
@@ -452,37 +485,6 @@ class Setting extends ActiveRecord {
 			}
 		}
 		return $response;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function afterFind() {
-		parent::afterFind();
-		if ($this->type == self::TYPE_FILE_PATH) {
-			$this->value = Yii::getAlias($this->store_dir) . DIRECTORY_SEPARATOR . $this->value;
-		}
-		if ($this->type == self::TYPE_FILE_URL) {
-			if (Module::isAdvanced()) {
-				/**@var $module Module */
-				$module = Yii::$app->getModule('setting');
-				if ($module->isBackend()) {
-					$store_dir = str_replace('backend/', '', $this->store_dir);
-				} else {
-					$store_dir = str_replace('frontend/', '', $this->store_dir);
-				}
-			} else {
-				$store_dir = str_replace('app/', '', $this->store_dir);
-			}
-			$this->value = Yii::$app->request->hostInfo . Yii::$app->request->baseUrl . Yii::getAlias($store_dir) . '/' . $this->value;
-		}
-		if (in_array($this->type, [
-				self::TYPE_CHECKBOX,
-				self::TYPE_MULTI_SELECT,
-			]) && $this->value != ''
-		) {
-			$this->value = explode(",", $this->value);
-		}
 	}
 
 	/**

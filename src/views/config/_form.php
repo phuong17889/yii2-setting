@@ -52,7 +52,7 @@ use yii\widgets\ActiveForm;
 
 	<?= $form->field($model, 'store_dir')->textInput([
 		'maxlength'   => true,
-		'placeholder' => 'Required if type in (file). Example & default: @web/uploads',
+		'placeholder' => 'Required if type in (file). Example & default: @app/web/uploads',
 	]) ?>
 
 	<?= $form->field($model, 'value')->textarea(['rows' => 6]) ?>
