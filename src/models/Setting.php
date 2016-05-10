@@ -449,22 +449,28 @@ class Setting extends ActiveRecord {
 					],
 				]);
 			case self::TYPE_CHECKBOX:
+				$random = rand(1000, 9999);
 				return Html::checkboxList('Setting[' . $this->code . ']', explode(",", $this->value), $this->getStoreRange(), $options != null ? $options : [
-					'class'       => 'nv-checkbox-list',
-					'itemOptions' => [
-						'labelOptions' => [
-							'class' => 'nv-checkbox nv-checkbox-outline',
-						],
-					],
+					'class' => 'nv-checkbox-list checkbox',
+					'item'  => function($index, $label, $name, $checked, $value) use ($random) {
+						$html = Html::beginTag('div');
+						$html .= Html::checkbox($name, $checked, ['id' => 'Setting_checkbox_' . $label . '_' . $index . '_' . $random]);
+						$html .= Html::label($label, 'Setting_checkbox_' . $label . '_' . $index . '_' . $random);
+						$html .= Html::endTag('div');
+						return $html;
+					},
 				]);
 			case self::TYPE_RADIO:
+				$random = rand(1000, 9999);
 				return Html::radioList('Setting[' . $this->code . ']', $this->value, $this->getStoreRange(), $options != null ? $options : [
-					'class'       => 'nv-radio-list',
-					'itemOptions' => [
-						'labelOptions' => [
-							'class' => 'nv-radio nv-radio-outline',
-						],
-					],
+					'class' => 'nv-checkbox-list radio',
+					'item'  => function($index, $label, $name, $checked, $value) use ($random) {
+						$html = Html::beginTag('div');
+						$html .= Html::radio($name, $checked, ['id' => 'Setting_radio_' . $label . '_' . $index . '_' . $random]);
+						$html .= Html::label($label, 'Setting_radio_' . $label . '_' . $index . '_' . $random);
+						$html .= Html::endTag('div');
+						return $html;
+					},
 				]);
 			default:
 				return Html::input('text', 'Setting[' . $this->code . ']', $this->value, $options != null ? $options : [

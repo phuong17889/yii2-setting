@@ -1,8 +1,8 @@
 <?php
 use kartik\tabs\TabsX;
-use kartik\widgets\AlertBlock;
 use navatech\base\assets\AwesomeBootstrapCheckboxAsset;
 use navatech\setting\models\Setting;
+use yii\bootstrap\Alert;
 use yii\bootstrap\Html;
 use yii\web\View;
 
@@ -14,10 +14,9 @@ AwesomeBootstrapCheckboxAsset::register($this);
 $this->title                   = $title;
 $this->params['breadcrumbs'][] = $this->title;
 $items                         = [];
-echo AlertBlock::widget([
-	'type'            => AlertBlock::TYPE_ALERT,
-	'useSessionFlash' => true,
-]);
+if (Yii::$app->session->hasFlash('alert')) {
+	echo Alert::widget(Yii::$app->session->getFlash('alert'));
+}
 if (YII_DEBUG):
 	?>
 	<div class="col-sm-offset-9 col-sm-3">
