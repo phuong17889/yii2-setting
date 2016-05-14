@@ -200,13 +200,18 @@ class Setting extends ActiveRecord {
 
 	/**
 	 * @return string
+	 * @throws ErrorException
 	 */
 	public function getName() {
 		if (Module::hasMultiLanguage()) {
 			$code = $this->code;
 			return Translate::$code();
 		} else {
-			return $this->name;
+			try {
+				return $this->name;
+			} catch (ErrorException $e) {
+				throw new ErrorException("You should run migrations by command: \"php yii migrate --migrationPath=@navatech/setting/migrations\"");
+			}
 		}
 	}
 
