@@ -17,6 +17,7 @@ use Yii;
 use yii\base\ErrorException;
 use yii\bootstrap\Html;
 use yii\db\ActiveRecord;
+use yii\helpers\Json;
 use yii\helpers\Url;
 use yii\web\UploadedFile;
 
@@ -380,10 +381,10 @@ class Setting extends ActiveRecord {
 					],
 					'pluginOptions' => $pluginOptions != null ? $pluginOptions : [
 						'previewFileType' => 'any',
+						'showRemove'      => false,
+						'showUpload'      => false,
 						'initialPreview'  => !$this->isNewRecord ? [
-							Html::img($this->value, [
-								'class' => 'file-preview-image',
-							]),
+							$this->value,
 						] : [],
 					],
 				]);
@@ -408,10 +409,10 @@ class Setting extends ActiveRecord {
 					],
 					'pluginOptions' => $pluginOptions != null ? $pluginOptions : [
 						'previewFileType' => 'any',
+						'showRemove'      => false,
+						'showUpload'      => false,
 						'initialPreview'  => !$this->isNewRecord ? [
-							Html::img($this->value, [
-								'class' => 'file-preview-image',
-							]),
+							$this->value,
 						] : [],
 					],
 				]);
@@ -486,11 +487,36 @@ class Setting extends ActiveRecord {
 	public function getStoreRange() {
 		$response = [];
 		if ($this->store_range != '' || $this->store_range != null) {
-			foreach (explode(",", $this->store_range) as $store_range) {
-				$response[$store_range] = $store_range;
+			$methodVariable = explode('::', $this->store_range);
+			if (count($methodVariable) == 2 && isset($methodVariable[1]) && strpos($methodVariable[1], '()') !== false) {
+				$methodVariable[1] = str_replace('()', '', $methodVariable[1]);
+				if (is_callable($methodVariable)) {
+					$response = call_user_func($methodVariable);
+				}
+			} else if (self::isJson($this->store_range)) {
+				$response = Json::decode($this->store_range);
+			} else {
+				foreach (explode(",", $this->store_range) as $store_range) {
+					$response[$store_range] = trim($store_range);
+				}
 			}
 		}
 		return $response;
+	}
+
+	/**
+	 * Will check if is valid json
+	 *
+	 * @param $string string
+	 *
+	 * @return bool
+	 */
+	public static function isJson($string) {
+		if (is_array($string) || empty($string)) {
+			return false;
+		}
+		json_decode($string);
+		return json_last_error() == JSON_ERROR_NONE;
 	}
 
 	/**

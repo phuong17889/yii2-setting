@@ -45,9 +45,13 @@ use yii\widgets\ActiveForm;
 		],
 	]) ?>
 
-	<?= $form->field($model, 'store_range')->textInput([
-		'maxlength'   => true,
-		'placeholder' => 'Required if type in (select, multiselect, checkbox, radio). Example: 1,2,3 or A,bcd,ef',
+	<?= $form->field($model, 'store_range')->textarea([
+		'rows'        => 6,
+		'placeholder' => 'Required if type in (select, multiselect, checkbox, radio), supported string with comma, json, callback function. 
+Example: 
+ - String: 1,2,3 or A,bcd,ef
+ - Json: {"0" : "abc", "1" : "def"}
+ - Callback: app\models\Setting::getItems()',
 	]) ?>
 
 	<?= $form->field($model, 'store_dir')->textInput([
