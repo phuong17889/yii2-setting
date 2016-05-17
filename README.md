@@ -65,11 +65,11 @@ yii migrate --migrationPath=@navatech/setting/migrations
 ### Config at backend
 backend : http://you-domain/backend/web/setting
 ####Attention:
-- Store Range required if type in (select, multiselect, checkbox, radio), supported string with comma, json, callback function.
-              Example:
-               - String: 1,2,3 or A,bcd,ef
-               - Json: {"0" : "abc", "1" : "def"}
-               - Callback: app\helpers\ArrayHelper::getItems()
+- Store Range required if type in (select, multiselect, checkbox, radio), supported string with comma, json, callback function.  
+              Example:  
+               - String: 1,2,3 or A,bcd,ef  
+               - Json: {"0" : "abc", "1" : "def"}  
+               - Callback: app\helpers\ArrayHelper::getItems()  
 Just create simple static function named `getItems` in `app\helpers\ArrayHelper`
  ~~~
  namespace app\helpers;
