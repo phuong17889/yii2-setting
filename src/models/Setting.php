@@ -19,6 +19,7 @@ use yii\bootstrap\Html;
 use yii\db\ActiveRecord;
 use yii\helpers\Json;
 use yii\helpers\Url;
+use yii\web\NotFoundHttpException;
 use yii\web\UploadedFile;
 
 /**
@@ -488,6 +489,7 @@ class Setting extends ActiveRecord {
 
 	/**
 	 * @return array
+	 * @throws NotFoundHttpException
 	 */
 	public function getStoreRange() {
 		$response = [];
@@ -497,6 +499,11 @@ class Setting extends ActiveRecord {
 				$methodVariable[1] = str_replace('()', '', $methodVariable[1]);
 				if (is_callable($methodVariable)) {
 					$response = call_user_func($methodVariable);
+				} else {
+					throw new NotFoundHttpException('Callback functions not found in ' . $methodVariable[0]);
+				}
+				if (!is_array($response)) {
+					throw new NotFoundHttpException('Callback functions ' . $this->store_range . ' not return an array');
 				}
 			} else if (self::isJson($this->store_range)) {
 				$response = Json::decode($this->store_range);

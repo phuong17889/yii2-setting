@@ -64,6 +64,28 @@ yii migrate --migrationPath=@navatech/setting/migrations
 
 ### Config at backend
 backend : http://you-domain/backend/web/setting
+####Attention:
+- Store Range required if type in (select, multiselect, checkbox, radio), supported string with comma, json, callback function.
+              Example:
+               - String: 1,2,3 or A,bcd,ef
+               - Json: {"0" : "abc", "1" : "def"}
+               - Callback: app\helpers\ArrayHelper::getItems()
+Just create simple static function named `getItems` in `app\helpers\ArrayHelper`
+ ~~~
+ namespace app\helpers;
+
+ class ArrayHeper {
+
+    public static function getItems(){
+        return [
+            0     => "abc",
+            1     => "def",
+            "ghi" => 2,
+        ];
+    }
+
+ }
+ ~~~
 
 ### Use Your Setting
 Once you set the value at the backend. Simply access your setting by the following code (auto-suggest code worked):
