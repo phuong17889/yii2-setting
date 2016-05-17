@@ -21,7 +21,10 @@ if (YII_DEBUG):
 	?>
 	<div class="col-sm-offset-9 col-sm-3">
 		<div class="form-inline pull-right">
-			<?= Html::a('Configure', ['config/index'], ['class' => 'btn btn-primary']) ?>
+			<?= Html::a('Configure', ['config/index'], [
+				'class' => 'btn btn-primary',
+				'style' => 'z-index:9999',
+			]) ?>
 		</div>
 	</div>
 <?php endif; ?>
