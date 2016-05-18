@@ -461,7 +461,10 @@ class Setting extends ActiveRecord {
 					'class' => 'nv-checkbox-list checkbox',
 					'item'  => function($index, $label, $name, $checked, $value) use ($random) {
 						$html = Html::beginTag('div');
-						$html .= Html::checkbox($name, $checked, ['id' => 'Setting_checkbox_' . $label . '_' . $index . '_' . $random]);
+						$html .= Html::checkbox($name, $checked, [
+							'id'    => 'Setting_checkbox_' . $label . '_' . $index . '_' . $random,
+							'value' => $value,
+						]);
 						$html .= Html::label($label, 'Setting_checkbox_' . $label . '_' . $index . '_' . $random);
 						$html .= Html::endTag('div');
 						return $html;
@@ -473,7 +476,10 @@ class Setting extends ActiveRecord {
 					'class' => 'nv-checkbox-list radio',
 					'item'  => function($index, $label, $name, $checked, $value) use ($random) {
 						$html = Html::beginTag('div');
-						$html .= Html::radio($name, $checked, ['id' => 'Setting_radio_' . $label . '_' . $index . '_' . $random]);
+						$html .= Html::radio($name, $checked, [
+							'id'    => 'Setting_radio_' . $label . '_' . $index . '_' . $random,
+							'value' => $value,
+						]);
 						$html .= Html::label($label, 'Setting_radio_' . $label . '_' . $index . '_' . $random);
 						$html .= Html::endTag('div');
 						return $html;
