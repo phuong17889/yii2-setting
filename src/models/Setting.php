@@ -443,6 +443,7 @@ class Setting extends ActiveRecord {
 				}
 				return Html::hiddenInput('Setting[' . $this->code . ']', $selector[0]) . SwitchInput::widget([
 					'name'             => 'Setting[' . $this->code . ']',
+					'checked'	   => $this->value == $selector[1],
 					'value'            => $selector[1],
 					'containerOptions' => [
 						'class' => 'nv-switch-container',
