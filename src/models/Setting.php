@@ -441,9 +441,9 @@ class Setting extends ActiveRecord {
 				if (count($selector) != 2) {
 					throw new ErrorException('Switch Field should have 2 store range, and negative is first. Example: no,yes', 500);
 				}
-				return SwitchInput::widget([
+				return Html::hiddenInput('Setting[' . $this->code . ']', $selector[0]) . SwitchInput::widget([
 					'name'             => 'Setting[' . $this->code . ']',
-					'value'            => $this->value,
+					'value'            => $selector[1],
 					'containerOptions' => [
 						'class' => 'nv-switch-container',
 					],
