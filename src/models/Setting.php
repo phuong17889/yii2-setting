@@ -183,6 +183,7 @@ class Setting extends ActiveRecord {
 		foreach ($parentSettings as $parentSetting) {
 			$content = Html::beginForm('', 'POST', [
 				'class'   => 'form-horizontal',
+				'id'      => 'nava-setting-form',
 				'enctype' => 'multipart/form-data',
 			]);
 			$content .= $parentSetting->getContent();
@@ -237,7 +238,10 @@ class Setting extends ActiveRecord {
 		$html     = '';
 		$settings = $this->find()->where(['parent_id' => $this->id])->orderBy(['sort_order' => SORT_ASC])->all();
 		foreach ($settings as $setting) {
-			$html .= Html::beginTag('div', ['class' => 'form-group']);
+			$html .= Html::beginTag('div', [
+				'class' => 'form-group',
+				'id'    => $setting->code,
+			]);
 			$html .= Html::label($setting->getName(), $setting->code, ['class' => 'col-sm-3 control-label no-padding-right']);
 			$html .= Html::beginTag('div', ['class' => 'col-sm-6']);
 			$html .= $setting->getItem();
