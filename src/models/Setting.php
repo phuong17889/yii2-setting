@@ -407,6 +407,11 @@ class Setting extends ActiveRecord {
 					$store_dir = str_replace('app/', '', $this->store_dir);
 				}
 				$value = Yii::$app->request->hostInfo . Yii::$app->request->baseUrl . Yii::getAlias($store_dir) . '/' . $this->value;
+				try {
+					$is_image = getimagesize($value) ? true : false;
+				} catch (ErrorException $e) {
+					$is_image = false;
+				}
 				return FileInput::widget([
 					'name'          => 'Setting[' . $this->code . ']',
 					'value'         => $value,
@@ -418,7 +423,7 @@ class Setting extends ActiveRecord {
 						'showRemove'      => false,
 						'showUpload'      => false,
 						'initialPreview'  => !$this->isNewRecord ? [
-							$this->value,
+							$is_image ? Html::img($value) : $this->value,
 						] : [],
 					],
 				]);
