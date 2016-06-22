@@ -4,6 +4,7 @@ namespace navatech\setting;
 use navatech\setting\models\Setting as SettingModel;
 use Yii;
 use yii\base\Component;
+use yii\base\InvalidConfigException;
 
 /**
  * {@inheritDoc}
@@ -48,6 +49,9 @@ class Setting extends Component {
 			}
 			return $setting->value;
 		} else {
+			if (YII_ENV_DEV || $default == null) {
+				throw new InvalidConfigException('Record "' . $code . '" doesn\'t exists. Make sure that you\'ve added it in the configuration!');
+			}
 			return $default;
 		}
 	}
