@@ -76,6 +76,8 @@ class Setting extends ActiveRecord {
 
 	const TYPE_RADIO        = 18;
 
+	const TYPE_SEPARATOR    = 19;
+
 	const TYPE              = [
 		'group',
 		'text',
@@ -96,6 +98,7 @@ class Setting extends ActiveRecord {
 		'switch',
 		'checkbox',
 		'radio',
+		'separator',
 	];
 
 	/**
@@ -108,66 +111,6 @@ class Setting extends ActiveRecord {
 	 */
 	public static function tableName() {
 		return '{{%setting}}';
-	}
-
-	/**
-	 * @inheritdoc
-	 */
-	public function rules() {
-		return [
-			[
-				[
-					'parent_id',
-					'sort_order',
-					'type',
-				],
-				'integer',
-			],
-			[
-				[
-					'code',
-					'type',
-				],
-				'required',
-			],
-			[
-				['value'],
-				'string',
-			],
-			[
-				['file'],
-				'file',
-				'skipOnEmpty' => true,
-			],
-			[
-				[
-					'store_range',
-					'store_dir',
-					'code',
-					'name',
-					'desc',
-				],
-				'string',
-				'max' => 255,
-			],
-		];
-	}
-
-	/**
-	 * @inheritdoc
-	 */
-	public function attributeLabels() {
-		return [
-			'id'          => 'ID',
-			'parent_id'   => 'Parent Tab',
-			'name'        => 'Name',
-			'code'        => 'Code',
-			'type'        => 'Type',
-			'store_range' => 'Store Range',
-			'store_dir'   => 'Store Dir',
-			'value'       => 'Value',
-			'sort_order'  => 'Sort Order',
-		];
 	}
 
 	/**
@@ -203,6 +146,37 @@ class Setting extends ActiveRecord {
 
 	/**
 	 * @return string
+	 */
+	public function getContent() {
+		/**@var $settings self[] */
+		$html     = '';
+		$settings = $this->find()->where(['parent_id' => $this->id])->orderBy(['sort_order' => SORT_ASC])->all();
+		foreach ($settings as $setting) {
+			$html .= Html::beginTag('div', [
+				'class' => 'form-group',
+				'id'    => $setting->code,
+			]);
+			if ($setting->type === self::TYPE_SEPARATOR) {
+				$html .= '<div class="col-sm-12"><hr></div>';
+			} else {
+				$html .= Html::label($setting->getName(), $setting->code, ['class' => 'col-sm-3 control-label no-padding-right']);
+				$html .= Html::beginTag('div', ['class' => 'col-sm-6']);
+				$html .= $setting->getItem();
+				$html .= Html::beginTag('span', ['class' => 'help-block']);
+				if (YII_DEBUG && YII_ENV == 'dev') {
+					$html .= '<strong>Yii::$app->setting->' . $setting->code . '</strong><br/>';
+				}
+				$html .= $setting->getDesc();
+				$html .= Html::endTag('span');
+				$html .= Html::endTag('div');
+			}
+			$html .= Html::endTag('div');
+		}
+		return $html;
+	}
+
+	/**
+	 * @return string
 	 * @throws ErrorException
 	 */
 	public function getName() {
@@ -216,45 +190,6 @@ class Setting extends ActiveRecord {
 				throw new ErrorException("You should run migrations by command: \"php yii migrate --migrationPath=@navatech/setting/migrations\"");
 			}
 		}
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getDesc() {
-		if (Module::hasMultiLanguage()) {
-			$code = 'desc_' . $this->code;
-			return Translate::$code();
-		} else {
-			return $this->desc;
-		}
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getContent() {
-		/**@var $settings self[] */
-		$html     = '';
-		$settings = $this->find()->where(['parent_id' => $this->id])->orderBy(['sort_order' => SORT_ASC])->all();
-		foreach ($settings as $setting) {
-			$html .= Html::beginTag('div', [
-				'class' => 'form-group',
-				'id'    => $setting->code,
-			]);
-			$html .= Html::label($setting->getName(), $setting->code, ['class' => 'col-sm-3 control-label no-padding-right']);
-			$html .= Html::beginTag('div', ['class' => 'col-sm-6']);
-			$html .= $setting->getItem();
-			$html .= Html::beginTag('span', ['class' => 'help-block']);
-			if (YII_DEBUG && YII_ENV == 'dev') {
-				$html .= '<strong>Yii::$app->setting->' . $setting->code . '</strong><br/>';
-			}
-			$html .= $setting->getDesc();
-			$html .= Html::endTag('span');
-			$html .= Html::endTag('div');
-			$html .= Html::endTag('div');
-		}
-		return $html;
 	}
 
 	/**
@@ -495,6 +430,8 @@ class Setting extends ActiveRecord {
 						return $html;
 					},
 				]);
+			case self::TYPE_SEPARATOR:
+				return '<hr>';
 			default:
 				return Html::input('text', 'Setting[' . $this->code . ']', $this->value, $options != null ? $options : [
 					'placeholder' => $this->getName(),
@@ -545,6 +482,78 @@ class Setting extends ActiveRecord {
 		}
 		json_decode($string);
 		return json_last_error() == JSON_ERROR_NONE;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getDesc() {
+		if (Module::hasMultiLanguage()) {
+			$code = 'desc_' . $this->code;
+			return Translate::$code();
+		} else {
+			return $this->desc;
+		}
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function rules() {
+		return [
+			[
+				[
+					'parent_id',
+					'sort_order',
+					'type',
+				],
+				'integer',
+			],
+			[
+				[
+					'code',
+					'type',
+				],
+				'required',
+			],
+			[
+				['value'],
+				'string',
+			],
+			[
+				['file'],
+				'file',
+				'skipOnEmpty' => true,
+			],
+			[
+				[
+					'store_range',
+					'store_dir',
+					'code',
+					'name',
+					'desc',
+				],
+				'string',
+				'max' => 255,
+			],
+		];
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function attributeLabels() {
+		return [
+			'id'          => 'ID',
+			'parent_id'   => 'Parent Tab',
+			'name'        => 'Name',
+			'code'        => 'Code',
+			'type'        => 'Type',
+			'store_range' => 'Store Range',
+			'store_dir'   => 'Store Dir',
+			'value'       => 'Value',
+			'sort_order'  => 'Sort Order',
+		];
 	}
 
 	/**
