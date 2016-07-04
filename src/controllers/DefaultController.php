@@ -56,7 +56,7 @@ class DefaultController extends Controller {
 						'class'   => RoleFilter::className(),
 						'name'    => 'Setting',
 						'actions' => [
-							'index' => 'Index',
+							'index' => Yii::t('app', 'index'),
 						],
 					],
 				]);
@@ -101,7 +101,7 @@ class DefaultController extends Controller {
 			$title = 'Setting';
 		}
 		return $this->render('index', [
-			'title'   => $title,
+			'title' => $title,
 		]);
 	}
 }

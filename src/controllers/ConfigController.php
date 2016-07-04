@@ -1,10 +1,15 @@
 <?php
 namespace navatech\setting\controllers;
 
+use navatech\base\Module;
+use navatech\language\Translate;
+use navatech\role\filters\RoleFilter;
 use navatech\setting\models\Setting;
 use navatech\setting\models\SettingSearch;
 use Yii;
+use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
@@ -17,14 +22,51 @@ class ConfigController extends Controller {
 	 * @inheritdoc
 	 */
 	public function behaviors() {
-		return [
-			'verbs' => [
+		$behaviors = [
+			'verbs'  => [
 				'class'   => VerbFilter::className(),
 				'actions' => [
 					'delete' => ['POST'],
 				],
 			],
+			'access' => [
+				'class' => AccessControl::className(),
+				'rules' => [
+					[
+						'allow' => true,
+						'roles' => ['@'],
+					],
+				],
+			],
 		];
+		if (Module::hasUserRole()) {
+			if (Module::hasMultiLanguage()) {
+				return ArrayHelper::merge($behaviors, [
+					'role' => [
+						'class'   => RoleFilter::className(),
+						'name'    => Translate::setting(),
+						'actions' => [
+							'index' => Translate::index(),
+						],
+					],
+				]);
+			} else {
+				return ArrayHelper::merge($behaviors, [
+					'role' => [
+						'class'   => RoleFilter::className(),
+						'name'    => 'Setting',
+						'actions' => [
+							'index'  => Yii::t('app', 'index'),
+							'create' => Yii::t('app', 'create'),
+							'update' => Yii::t('app', 'update'),
+							'delete' => Yii::t('app', 'delete'),
+						],
+					],
+				]);
+			}
+		} else {
+			return $behaviors;
+		}
 	}
 
 	/**
@@ -111,23 +153,6 @@ class ConfigController extends Controller {
 	}
 
 	/**
-	 * Deletes an existing Setting model.
-	 * If deletion is successful, the browser will be redirected to the 'index' page.
-	 *
-	 * @param integer $id
-	 *
-	 * @return mixed
-	 */
-	public function actionDelete($id) {
-		$model = $this->findModel($id);
-		if ($model->parent_id == 0 && $model->type == Setting::TYPE_GROUP) {
-			$model->deleteAll(['parent_id' => $model->id]);
-		}
-		$model->delete();
-		return $this->redirect(['index']);
-	}
-
-	/**
 	 * Finds the Setting model based on its primary key value.
 	 * If the model is not found, a 404 HTTP exception will be thrown.
 	 *
@@ -142,5 +167,22 @@ class ConfigController extends Controller {
 		} else {
 			throw new NotFoundHttpException('The requested page does not exist.');
 		}
+	}
+
+	/**
+	 * Deletes an existing Setting model.
+	 * If deletion is successful, the browser will be redirected to the 'index' page.
+	 *
+	 * @param integer $id
+	 *
+	 * @return mixed
+	 */
+	public function actionDelete($id) {
+		$model = $this->findModel($id);
+		if ($model->parent_id == 0 && $model->type == Setting::TYPE_GROUP) {
+			$model->deleteAll(['parent_id' => $model->id]);
+		}
+		$model->delete();
+		return $this->redirect(['index']);
 	}
 }
