@@ -1,4 +1,7 @@
 <?php
+/* @var $this View */
+/* @var $searchModel SettingSearch */
+/* @var $dataProvider ActiveDataProvider */
 use kartik\editable\Editable;
 use kartik\grid\GridView;
 use navatech\setting\models\Setting;
@@ -8,9 +11,6 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\web\View;
 
-/* @var $this View */
-/* @var $searchModel SettingSearch */
-/* @var $dataProvider ActiveDataProvider */
 $this->title                   = 'Settings';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 	<h1><?= Html::encode($this->title) ?></h1>
 	<p>
-		<?= Html::a('Create Setting', ['create'], ['class' => 'btn btn-success']) ?>
+		<?= Html::a(Yii::t('setting', 'Create Setting'), ['create'], ['class' => 'btn btn-success']) ?>
 	</p>
 	<?= GridView::widget([
 		'dataProvider'     => $dataProvider,
@@ -33,7 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
 		'persistResize'    => false,
 		'panel'            => [
 			'type'    => 'primary',
-			'heading' => 'Settings configure',
+			'heading' => Yii::t('setting', 'Setting configure'),
 		],
 		'containerOptions' => ['style' => 'overflow: auto'],
 		'headerRowOptions' => ['class' => 'kartik-sheet-style'],
@@ -62,7 +62,7 @@ $this->params['breadcrumbs'][] = $this->title;
 				'filterWidgetOptions' => [
 					'pluginOptions' => ['allowClear' => true],
 				],
-				'filterInputOptions'  => ['placeholder' => 'Parent tab'],
+				'filterInputOptions'  => ['placeholder' => Yii::t('setting','Parent tab')],
 				'value'               => function(Setting $data) {
 					$parent = $data->findOne($data->parent_id);
 					return $parent !== null ? $parent->getName() : '';

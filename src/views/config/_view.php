@@ -27,7 +27,7 @@ use navatech\setting\models\Setting;
 					</div>
 				</div>
 			<?php else : ?>
-				This is a tab
+				<?=Yii::t('setting','This is a tab')?>
 			<?php endif; ?>
 		</form>
 	</div>

@@ -1,6 +1,6 @@
 <?php
 use kartik\tabs\TabsX;
-use navatech\base\assets\AwesomeBootstrapCheckboxAsset;
+use navatech\setting\assets\AwesomeBootstrapCheckboxAsset;
 use navatech\setting\models\Setting;
 use yii\bootstrap\Alert;
 use yii\bootstrap\Html;
@@ -21,7 +21,7 @@ if (YII_DEBUG):
 	?>
 	<div class="col-sm-offset-9 col-sm-3">
 		<div class="form-inline pull-right">
-			<?= Html::a('Configure', ['config/index'], [
+			<?= Html::a(Yii::t('setting', 'Setting'), ['config/index'], [
 				'class' => 'btn btn-primary',
 				'style' => 'z-index:9999',
 			]) ?>

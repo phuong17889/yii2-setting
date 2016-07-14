@@ -383,7 +383,7 @@ class Setting extends ActiveRecord {
 			case self::TYPE_SWITCH:
 				$selector = explode(',', $this->store_range);
 				if (count($selector) != 2) {
-					throw new ErrorException('Switch Field should have 2 store range, and negative is first. Example: no,yes', 500);
+					throw new ErrorException(Yii::t('setting', 'Switch Field should have store with 2 value, and negative is first. Example: no,yes'), 500);
 				}
 				return Html::hiddenInput('Setting[' . $this->code . ']', $selector[0]) . SwitchInput::widget([
 					'name'             => 'Setting[' . $this->code . ']',
@@ -453,10 +453,10 @@ class Setting extends ActiveRecord {
 				if (is_callable($methodVariable)) {
 					$response = call_user_func($methodVariable);
 				} else {
-					throw new NotFoundHttpException('Callback functions not found in ' . $methodVariable[0]);
+					throw new NotFoundHttpException(Yii::t('setting', 'Callback function was not found in {0}', [$methodVariable[0]]));
 				}
 				if (!is_array($response)) {
-					throw new NotFoundHttpException('Callback functions ' . $this->store_range . ' not return an array');
+					throw new NotFoundHttpException(Yii::t('setting', 'Callback function {0} does not returns an array', [$this->store_range]));
 				}
 			} else if (self::isJson($this->store_range)) {
 				$response = Json::decode($this->store_range);

@@ -46,7 +46,10 @@ class ConfigController extends Controller {
 						'class'   => RoleFilter::className(),
 						'name'    => Translate::setting(),
 						'actions' => [
-							'index' => Translate::index(),
+							'index'  => Translate::index(),
+							'create' => Translate::create(),
+							'update' => Translate::update(),
+							'delete' => Translate::delete(),
 						],
 					],
 				]);
@@ -56,10 +59,10 @@ class ConfigController extends Controller {
 						'class'   => RoleFilter::className(),
 						'name'    => 'Setting',
 						'actions' => [
-							'index'  => Yii::t('app', 'index'),
-							'create' => Yii::t('app', 'create'),
-							'update' => Yii::t('app', 'update'),
-							'delete' => Yii::t('app', 'delete'),
+							'index'  => Yii::t('setting', 'List'),
+							'create' => Yii::t('setting', 'Create'),
+							'update' => Yii::t('setting', 'Update'),
+							'delete' => Yii::t('setting', 'Delete'),
 						],
 					],
 				]);

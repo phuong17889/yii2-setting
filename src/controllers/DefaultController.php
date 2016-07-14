@@ -56,7 +56,7 @@ class DefaultController extends Controller {
 						'class'   => RoleFilter::className(),
 						'name'    => 'Setting',
 						'actions' => [
-							'index' => Yii::t('app', 'index'),
+							'index' => Yii::t('setting', 'List'),
 						],
 					],
 				]);
@@ -98,7 +98,7 @@ class DefaultController extends Controller {
 		if (Module::hasMultiLanguage()) {
 			$title = Translate::setting();
 		} else {
-			$title = 'Setting';
+			$title = Yii::t('setting', 'Setting');
 		}
 		return $this->render('index', [
 			'title' => $title,
