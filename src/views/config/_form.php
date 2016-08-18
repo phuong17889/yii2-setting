@@ -32,7 +32,7 @@ use yii\widgets\ActiveForm;
 
 	<?= $form->field($model, 'name')->textInput([
 		'maxlength'   => true,
-		'placeholder' => 'Name of setting',
+		'placeholder' => Yii::t('setting', 'Name of setting'),
 	]) ?>
 
 	<?= $form->field($model, 'desc')->textarea(['rows' => 6]) ?>
@@ -55,7 +55,11 @@ Example:
 	]) ?>
 	<?= $form->field($model, 'store_dir')->textInput([
 		'maxlength'   => true,
-		'placeholder' => 'Required if type in (file). Example & default: @app/web/uploads',
+		'placeholder' => Yii::t('setting', 'Required if type in (file, url). Example & default: @app/web/uploads'),
+	]) ?>
+	<?= $form->field($model, 'store_url')->textInput([
+		'maxlength'   => true,
+		'placeholder' => Yii::t('setting', 'Required if type in (file, url). Example: http://yiiframework.com/uploads'),
 	]) ?>
 	<?= $form->field($model, 'value')->textarea(['rows' => 6]) ?>
 	<?= $form->field($model, 'sort_order')->textInput([

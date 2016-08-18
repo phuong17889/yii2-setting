@@ -21,7 +21,7 @@ class Module extends \navatech\base\Module {
 	 */
 	public function isBackend() {
 		if ($this->_isBackend === null) {
-			$this->_isBackend = strpos($this->controllerNamespace, 'backend') === false ? false : true;
+			$this->_isBackend = strpos(Yii::$app->controllerNamespace, 'backend') === false ? false : true;
 		}
 		return $this->_isBackend;
 	}

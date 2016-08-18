@@ -33,6 +33,7 @@ use yii\web\UploadedFile;
  * @property string  $type
  * @property string  $store_range
  * @property string  $store_dir
+ * @property string  $store_url
  * @property string  $value
  * @property integer $sort_order
  */
@@ -187,7 +188,7 @@ class Setting extends ActiveRecord {
 			try {
 				return $this->name;
 			} catch (ErrorException $e) {
-				throw new ErrorException("You should run migrations by command: \"php yii migrate --migrationPath=@navatech/setting/migrations\"");
+				throw new ErrorException(Yii::t('setting', 'You should run migrations by command {0}', ['"php yii migrate --migrationPath=@navatech/setting/migrations"']));
 			}
 		}
 	}
@@ -334,18 +335,7 @@ class Setting extends ActiveRecord {
 					],
 				]);
 			case self::TYPE_FILE_URL:
-				if (Module::isAdvanced()) {
-					/**@var $module Module */
-					$module = Yii::$app->getModule('setting');
-					if ($module->isBackend()) {
-						$store_dir = str_replace('backend/', '', $this->store_dir);
-					} else {
-						$store_dir = str_replace('frontend/', '', $this->store_dir);
-					}
-				} else {
-					$store_dir = str_replace('app/', '', $this->store_dir);
-				}
-				$value = Yii::$app->request->hostInfo . Yii::$app->request->baseUrl . Yii::getAlias($store_dir) . '/' . $this->value;
+				$value = Url::to([$this->store_url . '/' . $this->value], true);
 				try {
 					$is_image = getimagesize($value) ? true : false;
 				} catch (ErrorException $e) {
@@ -529,6 +519,7 @@ class Setting extends ActiveRecord {
 				[
 					'store_range',
 					'store_dir',
+					'store_url',
 					'code',
 					'name',
 					'desc',
@@ -545,14 +536,15 @@ class Setting extends ActiveRecord {
 	public function attributeLabels() {
 		return [
 			'id'          => 'ID',
-			'parent_id'   => 'Parent Tab',
-			'name'        => 'Name',
-			'code'        => 'Code',
-			'type'        => 'Type',
-			'store_range' => 'Store Range',
-			'store_dir'   => 'Store Dir',
-			'value'       => 'Value',
-			'sort_order'  => 'Sort Order',
+			'parent_id'   => Yii::t('setting', 'Parent tab'),
+			'name'        => Yii::t('setting', 'Name'),
+			'code'        => Yii::t('setting', 'Code'),
+			'type'        => Yii::t('setting', 'Type'),
+			'store_range' => Yii::t('setting', 'Store range'),
+			'store_dir'   => Yii::t('setting', 'Store dir'),
+			'store_url'   => Yii::t('setting', 'Store URL'),
+			'value'       => Yii::t('setting', 'Value'),
+			'sort_order'  => Yii::t('setting', 'Sort order'),
 		];
 	}
 

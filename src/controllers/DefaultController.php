@@ -81,12 +81,14 @@ class DefaultController extends Controller {
 					}
 				}
 			}
-			foreach ($setting as $key => $value) {
-				if ($value !== '' || $value != null) {
-					if (is_array($value)) {
-						Setting::updateAll(['value' => implode(",", $value)], ['code' => $key]);
-					} else {
-						Setting::updateAll(['value' => $value], ['code' => $key]);
+			if ($setting != null) {
+				foreach ($setting as $key => $value) {
+					if ($value !== '' || $value != null) {
+						if (is_array($value)) {
+							Setting::updateAll(['value' => implode(",", $value)], ['code' => $key]);
+						} else {
+							Setting::updateAll(['value' => $value], ['code' => $key]);
+						}
 					}
 				}
 			}
