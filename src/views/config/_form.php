@@ -1,7 +1,6 @@
 <?php
 use kartik\widgets\Select2;
 use navatech\setting\models\Setting;
-use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -15,10 +14,7 @@ use yii\widgets\ActiveForm;
 	<?php $form = ActiveForm::begin(); ?>
 
 	<?= $form->field($model, 'parent_id')->widget(Select2::className(), [
-		'data'          => ArrayHelper::map(Setting::find()->where([
-			'parent_id' => 0,
-			'type'      => 'group',
-		])->all(), 'id', 'name'),
+		'data'          => Setting::parentDependent(),
 		'options'       => ['placeholder' => Yii::t('setting', 'Select a parent tab ...')],
 		'pluginOptions' => [
 			'allowClear' => true,

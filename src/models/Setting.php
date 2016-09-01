@@ -561,6 +561,7 @@ class Setting extends ActiveRecord {
 			'parent_id'   => Yii::t('setting', 'Parent tab'),
 			'name'        => Yii::t('setting', 'Name'),
 			'code'        => Yii::t('setting', 'Code'),
+			'desc'        => Yii::t('setting', 'Description'),
 			'type'        => Yii::t('setting', 'Type'),
 			'store_range' => Yii::t('setting', 'Store range'),
 			'store_dir'   => Yii::t('setting', 'Store dir'),
@@ -612,5 +613,36 @@ class Setting extends ActiveRecord {
 		} else {
 			return false;
 		}
+	}
+
+	/**
+	 * @return array
+	 */
+	public static function parentDependent() {
+		$response[0] = Yii::t('setting', 'No parent');
+		/**@var Setting[] $actionSettings */
+		$actionSettings = self::find()->where(['type' => self::TYPE_ACTION])->orderBy(['sort_order' => SORT_ASC])->all();
+		if ($actionSettings !== null) {
+			foreach ($actionSettings as $actionSetting) {
+				$response[$actionSetting->id] = 'Action '.$actionSetting->name;
+				/**@var Setting[] $groupSettings */
+				$groupSettings = self::find()->where([
+					'type'      => self::TYPE_GROUP,
+					'parent_id' => $actionSetting->id,
+				])->orderBy(['sort_order' => SORT_ASC])->all();
+				foreach ($groupSettings as $groupSetting) {
+					$response[$groupSetting->id] = '— Group ' . $groupSetting->name;
+				}
+			}
+		}
+		/**@var Setting[] $groupSettings */
+		$groupSettings = self::find()->where([
+			'type'      => self::TYPE_GROUP,
+			'parent_id' => 0,
+		])->orderBy(['sort_order' => SORT_ASC])->all();
+		foreach ($groupSettings as $groupSetting) {
+			$response[$groupSetting->id] = 'Group '.$groupSetting->name;
+		}
+		return $response;
 	}
 }
