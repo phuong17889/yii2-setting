@@ -33,4 +33,5 @@ return [
 	'Record "{0}" doesn\'t exists. Make sure that you\'ve added it in the configuration!'                               => 'Bản ghi "{0}" không tồn tại. Hãy chắc chắn rằng bạn đã thêm chúng ở trong mục cấu hình!',
 	'Required if type in (file, url). Example & default: @app/web/uploads'                                              => 'Bắt buộc nếu kiểu cấu hình nằm trong (file, url). Ví dụ: @app/web/uploads',
 	'Required if type in (file, url). Example: http://yiiframework.com/uploads'                                         => 'Bắt buộc nếu kiểu cấu hình nằm trong (file, url). Ví dụ: http://yiiframework.com/uploads',
+	'Settings has been successfully saved'                                                                              => 'Lưu cấu hình thành công',
 ];

@@ -3,6 +3,7 @@ namespace navatech\setting\controllers;
 
 use navatech\language\Translate;
 use navatech\role\filters\RoleFilter;
+use navatech\setting\actions\DefaultAction;
 use navatech\setting\models\Setting;
 use navatech\setting\Module;
 use Yii;
@@ -67,6 +68,21 @@ class DefaultController extends Controller {
 	}
 
 	/**
+	 * {@inheritDoc}
+	 */
+	public function actions() {
+		$actions = [];
+		/**@var Setting[] $settings */
+		$settings = Setting::find()->where(['type' => Setting::TYPE_ACTION])->all();
+		foreach ($settings as $setting) {
+			$actions[$setting->code] = [
+				'class' => DefaultAction::className(),
+			];
+		}
+		return $actions;
+	}
+
+	/**
 	 * @return string|Response
 	 */
 	public function actionIndex() {
@@ -93,7 +109,7 @@ class DefaultController extends Controller {
 				}
 			}
 			Yii::$app->session->setFlash('alert', [
-				'body'    => 'Settings has been successfully saved',
+				'body'    => Yii::t('setting', 'Settings has been successfully saved'),
 				'options' => ['class' => 'alert-success'],
 			]);
 		}
@@ -104,6 +120,7 @@ class DefaultController extends Controller {
 		}
 		return $this->render('index', [
 			'title' => $title,
+			'code'  => null,
 		]);
 	}
 }

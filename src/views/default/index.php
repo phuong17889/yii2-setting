@@ -9,6 +9,7 @@ use yii\web\View;
 /**
  * @var $this  View
  * @var $title string
+ * @var $code  string
  */
 AwesomeBootstrapCheckboxAsset::register($this);
 $this->title                   = $title;
@@ -29,7 +30,7 @@ if (YII_DEBUG):
 	</div>
 <?php endif; ?>
 <?= TabsX::widget([
-	'items'        => Setting::getItems(),
+	'items'        => Setting::getItems($code),
 	'bordered'     => true,
 	'position'     => TabsX::POS_ABOVE,
 	'encodeLabels' => false,

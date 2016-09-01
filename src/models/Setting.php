@@ -39,67 +39,70 @@ use yii\web\UploadedFile;
  */
 class Setting extends ActiveRecord {
 
-	const TYPE_GROUP        = 0;
+	const TYPE_ACTION       = 'action';
 
-	const TYPE_TEXT         = 1;
+	const TYPE_GROUP        = 'group';
 
-	const TYPE_EMAIL        = 2;
+	const TYPE_TEXT         = 'text';
 
-	const TYPE_NUMBER       = 3;
+	const TYPE_EMAIL        = 'email';
 
-	const TYPE_TEXTAREA     = 4;
+	const TYPE_NUMBER       = 'number';
 
-	const TYPE_COLOR        = 5;
+	const TYPE_TEXTAREA     = 'textarea';
 
-	const TYPE_DATE         = 6;
+	const TYPE_COLOR        = 'color';
 
-	const TYPE_TIME         = 7;
+	const TYPE_DATE         = 'date';
 
-	const TYPE_DATETIME     = 8;
+	const TYPE_TIME         = 'time';
 
-	const TYPE_PASSWORD     = 9;
+	const TYPE_DATETIME     = 'datetime';
 
-	const TYPE_ROXYMCE      = 10;
+	const TYPE_PASSWORD     = 'password';
 
-	const TYPE_SELECT       = 11;
+	const TYPE_ROXYMCE      = 'roxymce';
 
-	const TYPE_MULTI_SELECT = 12;
+	const TYPE_SELECT       = 'select';
 
-	const TYPE_FILE_PATH    = 13;
+	const TYPE_MULTI_SELECT = 'multi_select';
 
-	const TYPE_FILE_URL     = 14;
+	const TYPE_FILE_PATH    = 'file_path';
 
-	const TYPE_PERCENT      = 15;
+	const TYPE_FILE_URL     = 'file_url';
 
-	const TYPE_SWITCH       = 16;
+	const TYPE_PERCENT      = 'percent';
 
-	const TYPE_CHECKBOX     = 17;
+	const TYPE_SWITCH       = 'switch';
 
-	const TYPE_RADIO        = 18;
+	const TYPE_CHECKBOX     = 'checkbox';
 
-	const TYPE_SEPARATOR    = 19;
+	const TYPE_RADIO        = 'radio';
+
+	const TYPE_SEPARATOR    = 'separator';
 
 	const TYPE              = [
-		'group',
-		'text',
-		'email',
-		'number',
-		'textarea',
-		'color',
-		'date',
-		'time',
-		'datetime',
-		'password',
-		'roxymce',
-		'select',
-		'multiselect',
-		'file',
-		'url',
-		'percent',
-		'switch',
-		'checkbox',
-		'radio',
-		'separator',
+		'action'      => 'Action',
+		'group'       => 'Group',
+		'text'        => 'Text field',
+		'email'       => 'Email field',
+		'number'      => 'Number field',
+		'textarea'    => 'Textarea field',
+		'color'       => 'Color picker',
+		'date'        => 'Date picker',
+		'time'        => 'Time picker',
+		'datetime'    => 'Datetime picker',
+		'password'    => 'Password field',
+		'roxymce'     => 'Roxymce widget',
+		'select'      => 'Single dropdown',
+		'multiselect' => 'Multi selectable',
+		'file'        => 'File Path field',
+		'url'         => 'File Url field',
+		'percent'     => 'Percent picker',
+		'switch'      => 'Switch',
+		'checkbox'    => 'Checkbox',
+		'radio'       => 'Radio',
+		'separator'   => 'Separator',
 	];
 
 	/**
@@ -115,15 +118,32 @@ class Setting extends ActiveRecord {
 	}
 
 	/**
+	 * @param null $code
+	 *
 	 * @return array
 	 */
-	public static function getItems() {
+	public static function getItems($code = null) {
 		/**@var $parentSettings self[] */
-		$items          = [];
-		$parentSettings = Setting::find()->where([
-			'parent_id' => 0,
-			'type'      => self::TYPE_GROUP,
-		])->orderBy(['sort_order' => SORT_ASC])->all();
+		$items = [];
+		if ($code == null) {
+			$parentSettings = Setting::find()->where([
+				'parent_id' => 0,
+				'type'      => self::TYPE_GROUP,
+			])->orderBy(['sort_order' => SORT_ASC])->all();
+		} else {
+			$currentSetting = self::findOne(['code' => $code]);
+			if ($currentSetting !== null) {
+				$parentSettings = Setting::find()->where([
+					'parent_id' => $currentSetting->id,
+					'type'      => self::TYPE_GROUP,
+				])->orderBy(['sort_order' => SORT_ASC])->all();
+			} else {
+				$parentSettings = Setting::find()->where([
+					'parent_id' => 0,
+					'type'      => self::TYPE_GROUP,
+				])->orderBy(['sort_order' => SORT_ASC])->all();
+			}
+		}
 		foreach ($parentSettings as $parentSetting) {
 			$content = Html::beginForm('', 'POST', [
 				'class'   => 'form-horizontal',
@@ -381,8 +401,7 @@ class Setting extends ActiveRecord {
 					'containerOptions' => [
 						'class' => 'nv-switch-container',
 					],
-					'options'          => $options != null ? $options : [
-					],
+					'options'          => $options != null ? $options : [],
 					'pluginOptions'    => $pluginOptions != null ? $pluginOptions : [
 						'state'   => $this->value == $selector[1],
 						'size'    => 'small',
@@ -495,19 +514,22 @@ class Setting extends ActiveRecord {
 				[
 					'parent_id',
 					'sort_order',
-					'type',
 				],
 				'integer',
 			],
 			[
 				[
 					'code',
+					'name',
 					'type',
 				],
 				'required',
 			],
 			[
-				['value'],
+				[
+					'value',
+					'type',
+				],
 				'string',
 			],
 			[

@@ -53,14 +53,19 @@ Example:
  - Json: {"0" : "abc", "1" : "def"}
  - Callback: app\models\Setting::getItems()',
 	]) ?>
-	<?= $form->field($model, 'store_dir')->textInput([
-		'maxlength'   => true,
-		'placeholder' => Yii::t('setting', 'Required if type in (file, url). Example & default: @app/web/uploads'),
-	]) ?>
-	<?= $form->field($model, 'store_url')->textInput([
-		'maxlength'   => true,
-		'placeholder' => Yii::t('setting', 'Required if type in (file, url). Example: http://yiiframework.com/uploads'),
-	]) ?>
+	<div class="store" style="display: <?= in_array($model->type, [
+		'file',
+		'url',
+	]) ? 'block' : 'none' ?>;">
+		<?= $form->field($model, 'store_dir')->textInput([
+			'maxlength'   => true,
+			'placeholder' => Yii::t('setting', 'Required if type in (file, url). Example & default: @app/web/uploads'),
+		]) ?>
+		<?= $form->field($model, 'store_url')->textInput([
+			'maxlength'   => true,
+			'placeholder' => Yii::t('setting', 'Required if type in (file, url). Example: http://yiiframework.com/uploads'),
+		]) ?>
+	</div>
 	<?= $form->field($model, 'value')->textarea(['rows' => 6]) ?>
 	<?= $form->field($model, 'sort_order')->textInput([
 		'type'  => 'number',
@@ -71,3 +76,13 @@ Example:
 	</div>
 	<?php ActiveForm::end(); ?>
 </div>
+<script>
+	$(document).on("change", "#setting-type", function() {
+		var th = $(this);
+		if(th.val() == 'file' || th.val() == 'url') {
+			$(".store").slideDown();
+		} else {
+			$(".store").slideUp();
+		}
+	});
+</script>

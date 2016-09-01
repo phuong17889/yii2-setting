@@ -9,6 +9,7 @@
  */
 namespace navatech\setting;
 
+use Yii;
 use yii\base\Application;
 use yii\base\BootstrapInterface;
 use yii\i18n\PhpMessageSource;
@@ -28,5 +29,15 @@ class Bootstrap implements BootstrapInterface {
 				'sourceLanguage' => 'en-US',
 			];
 		}
+		$configUrlRule          = [
+			'prefix'      => 'setting',
+			'routePrefix' => 'setting',
+			'rules'       => [
+				'<action:\w+>' => 'default/<action>',
+			],
+		];
+		$configUrlRule['class'] = 'yii\web\GroupUrlRule';
+		$rule                   = Yii::createObject($configUrlRule);
+		$app->urlManager->addRules([$rule], false);
 	}
 }
