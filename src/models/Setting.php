@@ -82,27 +82,27 @@ class Setting extends ActiveRecord {
 	const TYPE_SEPARATOR    = 'separator';
 
 	const TYPE              = [
-		'action'      => 'Action',
-		'group'       => 'Group',
-		'text'        => 'Text field',
-		'email'       => 'Email field',
-		'number'      => 'Number field',
-		'textarea'    => 'Textarea field',
-		'color'       => 'Color picker',
-		'date'        => 'Date picker',
-		'time'        => 'Time picker',
-		'datetime'    => 'Datetime picker',
-		'password'    => 'Password field',
-		'roxymce'     => 'Roxymce widget',
-		'select'      => 'Single dropdown',
+		'action'       => 'Action',
+		'group'        => 'Group',
+		'text'         => 'Text field',
+		'email'        => 'Email field',
+		'number'       => 'Number field',
+		'textarea'     => 'Textarea field',
+		'color'        => 'Color picker',
+		'date'         => 'Date picker',
+		'time'         => 'Time picker',
+		'datetime'     => 'Datetime picker',
+		'password'     => 'Password field',
+		'roxymce'      => 'Roxymce widget',
+		'select'       => 'Single dropdown',
 		'multi_select' => 'Multi selectable',
-		'file'        => 'File Path field',
-		'url'         => 'File Url field',
-		'percent'     => 'Percent picker',
-		'switch'      => 'Switch',
-		'checkbox'    => 'Checkbox',
-		'radio'       => 'Radio',
-		'separator'   => 'Separator',
+		'file_path'    => 'File Path field',
+		'file_url'     => 'File Url field',
+		'percent'      => 'Percent picker',
+		'switch'       => 'Switch',
+		'checkbox'     => 'Checkbox',
+		'radio'        => 'Radio',
+		'separator'    => 'Separator',
 	];
 
 	/**
@@ -413,7 +413,7 @@ class Setting extends ActiveRecord {
 				$random = rand(1000, 9999);
 				return Html::checkboxList('Setting[' . $this->code . ']', explode(",", $this->value), $this->getStoreRange(), $options != null ? $options : [
 					'class' => 'nv-checkbox-list checkbox',
-					'item'  => function($index, $label, $name, $checked, $value) use ($random) {
+					'item'  => function ($index, $label, $name, $checked, $value) use ($random) {
 						$html = Html::beginTag('div');
 						$html .= Html::checkbox($name, $checked, [
 							'id'    => 'Setting_checkbox_' . $label . '_' . $index . '_' . $random,
@@ -428,7 +428,7 @@ class Setting extends ActiveRecord {
 				$random = rand(1000, 9999);
 				return Html::radioList('Setting[' . $this->code . ']', $this->value, $this->getStoreRange(), $options != null ? $options : [
 					'class' => 'nv-checkbox-list radio',
-					'item'  => function($index, $label, $name, $checked, $value) use ($random) {
+					'item'  => function ($index, $label, $name, $checked, $value) use ($random) {
 						$html = Html::beginTag('div');
 						$html .= Html::radio($name, $checked, [
 							'id'    => 'Setting_radio_' . $label . '_' . $index . '_' . $random,
@@ -467,11 +467,13 @@ class Setting extends ActiveRecord {
 				if (!is_array($response)) {
 					throw new NotFoundHttpException(Yii::t('setting', 'Callback function {0} does not returns an array', [$this->store_range]));
 				}
-			} else if (self::isJson($this->store_range)) {
-				$response = Json::decode($this->store_range);
 			} else {
-				foreach (explode(",", $this->store_range) as $store_range) {
-					$response[$store_range] = trim($store_range);
+				if (self::isJson($this->store_range)) {
+					$response = Json::decode($this->store_range);
+				} else {
+					foreach (explode(",", $this->store_range) as $store_range) {
+						$response[$store_range] = trim($store_range);
+					}
 				}
 			}
 		}
@@ -621,10 +623,13 @@ class Setting extends ActiveRecord {
 	public static function parentDependent() {
 		$response[0] = Yii::t('setting', 'No parent');
 		/**@var Setting[] $actionSettings */
-		$actionSettings = self::find()->where(['type' => self::TYPE_ACTION])->orderBy(['sort_order' => SORT_ASC])->all();
+		$actionSettings = self::find()
+			->where(['type' => self::TYPE_ACTION])
+			->orderBy(['sort_order' => SORT_ASC])
+			->all();
 		if ($actionSettings !== null) {
 			foreach ($actionSettings as $actionSetting) {
-				$response[$actionSetting->id] = 'Action '.$actionSetting->name;
+				$response[$actionSetting->id] = 'Action ' . $actionSetting->name;
 				/**@var Setting[] $groupSettings */
 				$groupSettings = self::find()->where([
 					'type'      => self::TYPE_GROUP,
@@ -641,7 +646,7 @@ class Setting extends ActiveRecord {
 			'parent_id' => 0,
 		])->orderBy(['sort_order' => SORT_ASC])->all();
 		foreach ($groupSettings as $groupSetting) {
-			$response[$groupSetting->id] = 'Group '.$groupSetting->name;
+			$response[$groupSetting->id] = 'Group ' . $groupSetting->name;
 		}
 		return $response;
 	}
