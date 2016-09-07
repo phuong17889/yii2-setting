@@ -95,7 +95,7 @@ class Setting extends ActiveRecord {
 		'password'    => 'Password field',
 		'roxymce'     => 'Roxymce widget',
 		'select'      => 'Single dropdown',
-		'multiselect' => 'Multi selectable',
+		'multi_select' => 'Multi selectable',
 		'file'        => 'File Path field',
 		'url'         => 'File Url field',
 		'percent'     => 'Percent picker',
