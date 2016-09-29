@@ -48,10 +48,10 @@ Example:
  - String: 1,2,3 or A,bcd,ef
  - Json: {"0" : "abc", "1" : "def"}
  - Callback: app\models\Setting::getItems()',
-	]) ?>
+	]); ?>
 	<div class="store" style="display: <?= in_array($model->type, [
-		'file',
-		'url',
+		Setting::TYPE_FILE_URL,
+		Setting::TYPE_FILE_PATH,
 	]) ? 'block' : 'none' ?>;">
 		<?= $form->field($model, 'store_dir')->textInput([
 			'maxlength'   => true,
@@ -75,7 +75,7 @@ Example:
 <script>
 	$(document).on("change", "#setting-type", function() {
 		var th = $(this);
-		if(th.val() == 'file' || th.val() == 'url') {
+		if(th.val() == 'file_path' || th.val() == 'file_url') {
 			$(".store").slideDown();
 		} else {
 			$(".store").slideUp();

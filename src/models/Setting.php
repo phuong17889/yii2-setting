@@ -355,12 +355,7 @@ class Setting extends ActiveRecord {
 					],
 				]);
 			case self::TYPE_FILE_URL:
-				$value = Url::to([$this->store_url . '/' . $this->value], true);
-				try {
-					$is_image = getimagesize($value) ? true : false;
-				} catch (ErrorException $e) {
-					$is_image = false;
-				}
+				$value = $this->store_url . '/' . $this->value;
 				return FileInput::widget([
 					'name'          => 'Setting[' . $this->code . ']',
 					'value'         => $value,
@@ -368,12 +363,13 @@ class Setting extends ActiveRecord {
 						'class' => 'form-control',
 					],
 					'pluginOptions' => $pluginOptions != null ? $pluginOptions : [
-						'previewFileType' => 'any',
-						'showRemove'      => false,
-						'showUpload'      => false,
-						'initialPreview'  => !$this->isNewRecord ? [
-							$is_image ? Html::img($value) : $this->value,
-						] : [],
+						'previewFileType'        => 'any',
+						'showRemove'             => false,
+						'showUpload'             => false,
+						'initialPreviewAsData'   => true,
+						'initialPreviewFileType' => self::fileType(pathinfo($this->value, PATHINFO_EXTENSION)),
+						'initialPreview'         => !$this->isNewRecord ? $value : [],
+						'initialCaption'         => $this->value,
 					],
 				]);
 			case self::TYPE_PERCENT:
@@ -649,5 +645,49 @@ class Setting extends ActiveRecord {
 			$response[$groupSetting->id] = 'Group ' . $groupSetting->name;
 		}
 		return $response;
+	}
+
+	/**
+	 * @param $extension
+	 *
+	 * @return int|string
+	 */
+	public static function fileType($extension) {
+		$allowType = [
+			'image' => [
+				'gif',
+				'png',
+				'jpeg',
+				'jpg',
+			],
+			'html'  => [
+				'html',
+				'htm',
+			],
+			'text'  => [
+				'txt',
+				'md',
+				'csv',
+				'nfo',
+				'php',
+				'ini',
+			],
+			'video' => [
+				'ogg',
+				'mp4',
+				'webm',
+			],
+			'audio' => [
+				'mp3',
+				'wav',
+			],
+			'flash' => ['swf'],
+		];
+		foreach ($allowType as $type => $extensions) {
+			if (in_array($extension, $extensions)) {
+				return $type;
+			}
+		}
+		return 'other';
 	}
 }
