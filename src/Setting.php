@@ -58,23 +58,24 @@ class Setting extends Component {
 	/**
 	 * Return Icon class name
 	 *
-	 * @param      $code
-	 * @param null $default
+	 * @param string $code
+	 * @param string $default
 	 *
-	 * @return null|string
+	 * @return string
 	 * @throws InvalidConfigException
 	 */
-	public function getIcon($code, $default = null) {
+	public function getIcon($code, $default = '') {
 		if (!$code) {
 			return $default;
 		}
 		$setting = SettingModel::findOne(['code' => $code]);
-		if ($setting) {
+		if ($setting && in_array($setting->type, [
+				SettingModel::TYPE_ACTION,
+				SettingModel::TYPE_GROUP,
+			])
+		) {
 			return $setting->icon;
 		} else {
-			if (YII_ENV_DEV && $default == null) {
-				throw new InvalidConfigException(Yii::t('setting', 'Record "{0}" doesn\'t exists. Make sure that you\'ve added it in the configuration!', [$code]));
-			}
 			return $default;
 		}
 	}

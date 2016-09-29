@@ -159,7 +159,7 @@ class Setting extends ActiveRecord {
 			$content .= Html::endTag('div');
 			$content .= Html::endForm();
 			$items[] = [
-				'label'   => $parentSetting->getName(),
+				'label'   => ($parentSetting->icon != '' ? '<span class="glyphicon ' . $parentSetting->icon . '"></span> ' : '') . $parentSetting->getName(),
 				'content' => $content,
 			];
 		}
