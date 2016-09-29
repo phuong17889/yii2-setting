@@ -26,23 +26,31 @@ use yii\widgets\ActiveForm;
 		'maxlength'   => true,
 		'placeholder' => Yii::t('setting', 'Code key of setting'),
 	]) ?>
-	<div class="icon" style="display: <?= in_array($model->type, [
-		Setting::TYPE_ACTION,
+	<?= $form->beginField($model, 'name') ?>
+	<?= Html::activeLabel($model, 'name', ['class' => 'control-label']) ?>
+	<?php if (in_array($model->type, [
 		Setting::TYPE_GROUP,
-	]) ? 'block' : 'none' ?>;">
-		<?= $form->field($model, 'icon')->widget(Iconpicker::className(), [
-			'iconset'       => 'glyphicon',
-			'pickerOptions' => ['class' => 'btn btn-primary'],
-			'clientOptions' => [
-				'placement' => 'bottom',
-				'search'    => false,
-			],
-		]) ?>
-	</div>
-	<?= $form->field($model, 'name')->textInput([
-		'maxlength'   => true,
-		'placeholder' => Yii::t('setting', 'Name of setting'),
-	]) ?>
+		Setting::TYPE_ACTION,
+	])): ?>
+		<div class="input-group">
+	    <span class="input-group-btn icon">
+		    <?= Iconpicker::widget([
+			    'model'         => $model,
+			    'attribute'     => 'icon',
+			    'pickerOptions' => ['class' => 'btn btn-default'],
+			    'clientOptions' => [
+				    'placement' => 'bottom',
+				    'search'    => false,
+			    ],
+		    ]) ?>
+	    </span>
+			<?= Html::activeTextInput($model, 'name', ['class' => 'form-control']) ?>
+		</div>
+	<?php else : ?>
+		<?= Html::activeTextInput($model, 'name', ['class' => 'form-control']) ?>
+	<?php endif; ?>
+	<?= Html::error($model, 'name', ['class' => 'help-block']) ?>
+	<?= $form->endField() ?>
 
 	<?= $form->field($model, 'desc')->textarea(['rows' => 6]) ?>
 
@@ -90,13 +98,17 @@ Example:
 		var th = $(this);
 		if (th.val() == 'file_path' || th.val() == 'file_url') {
 			$(".store").slideDown();
-			$(".icon").slideUp();
-		} else if (th.val() == 'group' || th.val() == 'action') {
-			$(".store").slideUp();
-			$(".icon").slideDown();
 		} else {
-			$(".icon").slideUp();
 			$(".store").slideUp();
+		}
+		if (th.val() == 'group' || th.val() == 'action') {
+			$(".input-group-btn.icon").fadeIn('normal', function () {
+				$(this).parent().addClass("input-group");
+			});
+		} else {
+			$(".input-group-btn.icon").fadeOut('normal', function () {
+				$(this).parent().removeClass("input-group");
+			});
 		}
 	});
 </script>
