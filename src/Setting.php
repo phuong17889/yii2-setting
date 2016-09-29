@@ -30,7 +30,7 @@ class Setting extends Component {
 			}
 			if ($setting->type == SettingModel::TYPE_FILE_URL) {
 				if (php_sapi_name() != 'cli') {
-					if (strpos($setting->store_url, 'http') != false) {
+					if (strpos($setting->store_url, 'http') !== false) {
 						$setting->value = $setting->store_url . '/' . $setting->value;
 					} else {
 						$setting->value = Url::to([$setting->store_url . '/' . $setting->value], true);
