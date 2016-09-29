@@ -48,7 +48,31 @@ class Setting extends Component {
 			}
 			return $setting->value;
 		} else {
-			if (YII_ENV_DEV || $default == null) {
+			if (YII_ENV_DEV && $default == null) {
+				throw new InvalidConfigException(Yii::t('setting', 'Record "{0}" doesn\'t exists. Make sure that you\'ve added it in the configuration!', [$code]));
+			}
+			return $default;
+		}
+	}
+
+	/**
+	 * Return Icon class name
+	 *
+	 * @param      $code
+	 * @param null $default
+	 *
+	 * @return null|string
+	 * @throws InvalidConfigException
+	 */
+	public function getIcon($code, $default = null) {
+		if (!$code) {
+			return $default;
+		}
+		$setting = SettingModel::findOne(['code' => $code]);
+		if ($setting) {
+			return $setting->icon;
+		} else {
+			if (YII_ENV_DEV && $default == null) {
 				throw new InvalidConfigException(Yii::t('setting', 'Record "{0}" doesn\'t exists. Make sure that you\'ve added it in the configuration!', [$code]));
 			}
 			return $default;

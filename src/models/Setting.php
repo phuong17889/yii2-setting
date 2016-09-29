@@ -30,6 +30,7 @@ use yii\web\UploadedFile;
  * @property string  $name
  * @property string  $desc
  * @property string  $code
+ * @property string  $icon
  * @property string  $type
  * @property string  $store_range
  * @property string  $store_dir
@@ -527,6 +528,7 @@ class Setting extends ActiveRecord {
 				[
 					'value',
 					'type',
+					'icon',
 				],
 				'string',
 			],
@@ -560,6 +562,7 @@ class Setting extends ActiveRecord {
 			'name'        => Yii::t('setting', 'Name'),
 			'code'        => Yii::t('setting', 'Code'),
 			'desc'        => Yii::t('setting', 'Description'),
+			'icon'        => Yii::t('setting', 'Icon'),
 			'type'        => Yii::t('setting', 'Type'),
 			'store_range' => Yii::t('setting', 'Store range'),
 			'store_dir'   => Yii::t('setting', 'Store dir'),

@@ -26,9 +26,11 @@
 	"support" : {
 		"source" : "https://github.com/navatech/yii2-setting"
 	},
+	"repositories": [],
 	"require" : {
 		"php" : ">=5.6.0",
 		"bower-asset/awesome-bootstrap-checkbox" : "^0.3.7",
+		"insolita/yii2-iconpicker" : "^2.0",
 		"navatech/yii2-navatech-base" : "@dev",
 		"navatech/yii2-roxymce" : "@dev",
 		"kartik-v/yii2-password" : "@dev",

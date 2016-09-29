@@ -1,4 +1,5 @@
 <?php
+use insolita\iconpicker\Iconpicker;
 use kartik\widgets\Select2;
 use navatech\setting\models\Setting;
 use yii\helpers\Html;
@@ -25,7 +26,19 @@ use yii\widgets\ActiveForm;
 		'maxlength'   => true,
 		'placeholder' => Yii::t('setting', 'Code key of setting'),
 	]) ?>
-
+	<div class="icon" style="display: <?= in_array($model->type, [
+		Setting::TYPE_ACTION,
+		Setting::TYPE_GROUP,
+	]) ? 'block' : 'none' ?>;">
+		<?= $form->field($model, 'icon')->widget(Iconpicker::className(), [
+			'iconset'       => 'glyphicon',
+			'pickerOptions' => ['class' => 'btn btn-primary'],
+			'clientOptions' => [
+				'placement' => 'bottom',
+				'search'    => false,
+			],
+		]) ?>
+	</div>
 	<?= $form->field($model, 'name')->textInput([
 		'maxlength'   => true,
 		'placeholder' => Yii::t('setting', 'Name of setting'),
@@ -73,11 +86,16 @@ Example:
 	<?php ActiveForm::end(); ?>
 </div>
 <script>
-	$(document).on("change", "#setting-type", function() {
+	$(document).on("change", "#setting-type", function () {
 		var th = $(this);
-		if(th.val() == 'file_path' || th.val() == 'file_url') {
+		if (th.val() == 'file_path' || th.val() == 'file_url') {
 			$(".store").slideDown();
+			$(".icon").slideUp();
+		} else if (th.val() == 'group' || th.val() == 'action') {
+			$(".store").slideUp();
+			$(".icon").slideDown();
 		} else {
+			$(".icon").slideUp();
 			$(".store").slideUp();
 		}
 	});
