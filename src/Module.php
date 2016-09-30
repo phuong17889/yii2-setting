@@ -11,7 +11,6 @@ class Module extends \navatech\base\Module {
 
 	public function init() {
 		parent::init();
-		$this->setViewPath('@navatech/setting/views');
 	}
 
 	/**

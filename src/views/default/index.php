@@ -18,20 +18,21 @@ $items                         = [];
 if (Yii::$app->session->hasFlash('alert')) {
 	echo Alert::widget(Yii::$app->session->getFlash('alert'));
 }
-if (YII_DEBUG):
-	?>
-	<div class="col-sm-offset-9 col-sm-3">
-		<div class="form-inline pull-right">
-			<?= Html::a(Yii::t('setting', 'Setting'), ['config/index'], [
-				'class' => 'btn btn-primary',
-				'style' => 'z-index:9999',
-			]) ?>
-		</div>
+?>
+<div class="navatech-setting">
+	<div class="col-sm-12">
+		<?php if (YII_ENV_DEV): ?>
+			<p class="pull-right">
+				<?= Html::a(Yii::t('setting', 'Setting'), ['config/index'], [
+					'class' => 'btn btn-primary',
+				]) ?>
+			</p>
+		<?php endif; ?>
+		<?= TabsX::widget([
+			'items'        => Setting::getItems($code),
+			'bordered'     => true,
+			'position'     => TabsX::POS_ABOVE,
+			'encodeLabels' => false,
+		]); ?>
 	</div>
-<?php endif; ?>
-<?= TabsX::widget([
-	'items'        => Setting::getItems($code),
-	'bordered'     => true,
-	'position'     => TabsX::POS_ABOVE,
-	'encodeLabels' => false,
-]); ?>
+</div>
