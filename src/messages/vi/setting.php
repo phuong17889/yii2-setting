@@ -15,6 +15,7 @@ return [
 	'Update'                                                                                                            => 'Cập nhật',
 	'View'                                                                                                              => 'Chi tiết',
 	'Delete'                                                                                                            => 'Xóa',
+	'Save'                                                                                                              => 'Lưu',
 	'Value'                                                                                                             => 'Giá trị',
 	'Sort order'                                                                                                        => 'Vị trí',
 	'No parent'                                                                                                         => 'Không có thẻ cha',

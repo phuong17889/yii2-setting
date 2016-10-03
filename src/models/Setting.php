@@ -154,7 +154,7 @@ class Setting extends ActiveRecord {
 			$content .= $parentSetting->getContent();
 			$content .= Html::beginTag('div', ['class' => 'form-group']);
 			$content .= Html::beginTag('div', ['class' => 'col-sm-9 col-sm-offset-3']);
-			$content .= Html::submitButton('Save', ['class' => 'btn btn-success']);
+			$content .= Html::submitButton(Yii::t('setting', 'Save'), ['class' => 'btn btn-success']);
 			$content .= Html::endTag('div');
 			$content .= Html::endTag('div');
 			$content .= Html::endForm();
