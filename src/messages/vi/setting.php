@@ -16,7 +16,7 @@ return [
 	'View'                                                                                                              => 'Chi tiết',
 	'Delete'                                                                                                            => 'Xóa',
 	'Value'                                                                                                             => 'Giá trị',
-	'Sort order'                                                                                                        => 'Thứ tự sắp xếp',
+	'Sort order'                                                                                                        => 'Vị trí',
 	'No parent'                                                                                                         => 'Không có thẻ cha',
 	'Setting'                                                                                                           => 'Cấu hình',
 	'Create Setting'                                                                                                    => 'Thêm mới cấu hình',
