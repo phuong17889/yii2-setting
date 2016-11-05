@@ -10,13 +10,13 @@ The preferred way to install this extension is through [composer](http://getcomp
 Either run
 
 ```
-php composer.phar require navatech/yii2-setting "@dev"
+php composer.phar require navatech/yii2-setting "1.0.*"
 ```
 
 or add
 
 ```
-"navatech/yii2-setting": "*"
+"navatech/yii2-setting": "1.0.*"
 ```
 
 to the require section of your `composer.json` file.
