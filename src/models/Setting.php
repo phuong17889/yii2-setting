@@ -309,7 +309,7 @@ class Setting extends ActiveRecord {
 					'options'     => $options != null ? $options : [
 						'title' => $this->getName(),
 					],
-					'htmlOptions' => $pluginOptions != null ? $pluginOptions : [],
+					'clientOptions' => $pluginOptions != null ? $pluginOptions : [],
 				]);
 			case self::TYPE_SELECT:
 				return Select2::widget([
