@@ -529,6 +529,7 @@ class Setting extends ActiveRecord {
 					'value',
 					'type',
 					'icon',
+					'store_range',
 				],
 				'string',
 			],
@@ -539,7 +540,6 @@ class Setting extends ActiveRecord {
 			],
 			[
 				[
-					'store_range',
 					'store_dir',
 					'store_url',
 					'code',
