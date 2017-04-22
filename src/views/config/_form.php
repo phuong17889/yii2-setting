@@ -132,8 +132,11 @@ Example:
 		}
 	});
 	$('#custom-store-range').on('show.bs.modal', function(e) {
-		var th       = $(this);
-		var data     = $("#setting-store_range").val();
+		var th   = $(this);
+		var data = $("#setting-store_range").val();
+		if(data === '') {
+			data = '{}';
+		}
 		var response = jQuery.parseJSON(data);
 		if(typeof response === 'object') {
 			var html = '';
