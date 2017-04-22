@@ -39,4 +39,7 @@ return [
 	'Required if type in (file, url). Example & default: @app/web/uploads'                                              => 'Bắt buộc nếu kiểu cấu hình nằm trong (file, url). Ví dụ: @app/web/uploads',
 	'Required if type in (file, url). Example: http://yiiframework.com/uploads'                                         => 'Bắt buộc nếu kiểu cấu hình nằm trong (file, url). Ví dụ: http://yiiframework.com/uploads',
 	'Settings has been successfully saved'                                                                              => 'Lưu cấu hình thành công',
+	'Custom Store Range'                                                                                                => 'Tùy chọn giá trị có sẵn',
+	'Add a new record'                                                                                                  => 'Thêm mới 1 cột',
+	'Save changes'                                                                                                      => 'Lưu thay đổi',
 ];
