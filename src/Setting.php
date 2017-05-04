@@ -1,4 +1,5 @@
 <?php
+
 namespace navatech\setting;
 
 use navatech\setting\models\Setting as SettingModel;
@@ -9,6 +10,15 @@ use yii\helpers\Url;
 
 /**
  * {@inheritDoc}
+ * @method string getValue(string $code, string $default = '')
+ * @method string getIcon(string $code, string $default = '')
+ * @method string getDesc(string $code, string $default = '')
+ * @method string getStoreRange(string $code, string $default = '')
+ * @method string getName(string $code, string $default = '')
+ * @method string getType(string $code, string $default = '')
+ * @method string getStoreDir(string $code, string $default = '')
+ * @method string getSortOrder(string $code, string $default = '')
+ * @method string getStoreUrl(string $code, string $default = '')
  */
 class Setting extends Component {
 
@@ -56,25 +66,19 @@ class Setting extends Component {
 	}
 
 	/**
-	 * Return Icon class name
-	 *
-	 * @param string $code
-	 * @param string $default
-	 *
-	 * @return string
-	 * @throws InvalidConfigException
+	 * {@inheritDoc}
 	 */
-	public function getIcon($code, $default = '') {
+	public function __call($name, $params) {
+		$code    = isset($params[0]) ? $params[0] : false;
+		$default = isset($params[1]) ? $params[1] : '';
 		if (!$code) {
 			return $default;
 		}
 		$setting = SettingModel::findOne(['code' => $code]);
-		if ($setting && in_array($setting->type, [
-				SettingModel::TYPE_ACTION,
-				SettingModel::TYPE_GROUP,
-			])
-		) {
-			return $setting->icon;
+		$name    = str_replace('get', '', $name);
+		$name    = substr(strtolower(preg_replace("/([A-Z]+)/", "_$1", $name)), 1);
+		if ($setting->hasAttribute($name)) {
+			return $setting->$name;
 		} else {
 			return $default;
 		}
