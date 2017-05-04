@@ -75,11 +75,18 @@ class Setting extends Component {
 			return $default;
 		}
 		$setting = SettingModel::findOne(['code' => $code]);
-		$name    = str_replace('get', '', $name);
-		$name    = substr(strtolower(preg_replace("/([A-Z]+)/", "_$1", $name)), 1);
-		if ($setting->hasAttribute($name)) {
-			return $setting->$name;
+		if ($setting !== null) {
+			$name = str_replace('get', '', $name);
+			$name = substr(strtolower(preg_replace("/([A-Z]+)/", "_$1", $name)), 1);
+			if ($setting->hasAttribute($name)) {
+				return $setting->$name;
+			} else {
+				return $default;
+			}
 		} else {
+			if (YII_ENV_DEV && $default == null) {
+				throw new InvalidConfigException(Yii::t('setting', 'Record "{0}" doesn\'t exists. Make sure that you\'ve added it in the configuration!', [$code]));
+			}
 			return $default;
 		}
 	}
