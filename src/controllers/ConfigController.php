@@ -44,7 +44,7 @@ class ConfigController extends Controller {
 				return ArrayHelper::merge($behaviors, [
 					'role' => [
 						'class'   => RoleFilter::className(),
-						'name'    => Translate::setting(),
+						'name'    => Translate::configure(),
 						'actions' => [
 							'index'  => Translate::index(),
 							'create' => Translate::create(),
