@@ -40,11 +40,11 @@ class ConfigController extends Controller {
 			],
 		];
 		if (Module::hasUserRole()) {
-			if (Module::hasMultiLanguage()) {
+			if (Module::hasMultiLanguage() && $this->module->enableMultiLanguage) {
 				return ArrayHelper::merge($behaviors, [
 					'role' => [
 						'class'   => RoleFilter::className(),
-						'name'    => Translate::configure(),
+						'name'    => Translate::setting(),
 						'actions' => [
 							'index'  => Translate::index(),
 							'create' => Translate::create(),

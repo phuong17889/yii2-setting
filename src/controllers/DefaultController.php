@@ -41,7 +41,7 @@ class DefaultController extends Controller {
 			],
 		];
 		if (Module::hasUserRole()) {
-			if (Module::hasMultiLanguage()) {
+			if (Module::hasMultiLanguage() && $this->module->enableMultiLanguage) {
 				return ArrayHelper::merge($behaviors, [
 					'role' => [
 						'class'   => RoleFilter::className(),

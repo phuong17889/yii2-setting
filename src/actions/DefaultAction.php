@@ -47,7 +47,7 @@ class DefaultAction extends Action {
 				'options' => ['class' => 'alert-success'],
 			]);
 		}
-		if (Module::hasMultiLanguage()) {
+		if (Module::hasMultiLanguage() && $this->controller->module->enableMultiLanguage) {
 			$title = Translate::setting();
 		} else {
 			$title = Yii::t('setting', 'Setting');

@@ -202,7 +202,7 @@ class Setting extends ActiveRecord {
 	 * @throws ErrorException
 	 */
 	public function getName() {
-		if (Module::hasMultiLanguage()) {
+		if (Module::hasMultiLanguage() && Yii::$app->getModule('setting')->enableMultiLanguage) {
 			$code = $this->code;
 			return Translate::$code();
 		} else {
@@ -496,7 +496,7 @@ class Setting extends ActiveRecord {
 	 * @return string
 	 */
 	public function getDesc() {
-		if (Module::hasMultiLanguage()) {
+		if (Module::hasMultiLanguage() && Yii::$app->getModule('setting')->enableMultiLanguage) {
 			$code = 'desc_' . $this->code;
 			return Translate::$code();
 		} else {

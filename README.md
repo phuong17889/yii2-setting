@@ -49,8 +49,9 @@ yii migrate --migrationPath=@navatech/setting/migrations
 ```php
     'modules'    => [
    		'setting'  => [
-            'class'               => 'navatech\setting\Module',
-            'controllerNamespace' => 'navatech\setting\controllers',
+			'class'               => 'navatech\setting\Module',
+			'controllerNamespace' => 'navatech\setting\controllers',
+			'enableMultiLanguage' => false,//set true if navatech/yii2-multi-language installed and want to translate setting
    		],
    		'gridview' => [
             'class' => '\kartik\grid\Module',

@@ -1,11 +1,14 @@
 <?php
+
 namespace navatech\setting;
 
 use Yii;
 
 class Module extends \navatech\base\Module {
 
-	public    $controllerNamespace = 'navatech\setting\controllers';
+	public    $controllerNamespace   = 'navatech\setting\controllers';
+
+	public    $enableMultiLanguage = false;
 
 	protected $_isBackend;
 
