@@ -40,7 +40,7 @@ class ConfigController extends Controller {
 			],
 		];
 		if (Module::hasUserRole()) {
-			if (Module::hasMultiLanguage() && $this->module->enableMultiLanguage) {
+			if (Module::hasMultiLanguage() && Yii::$app->getModule('setting')->enableMultiLanguage) {
 				return ArrayHelper::merge($behaviors, [
 					'role' => [
 						'class'   => RoleFilter::className(),
