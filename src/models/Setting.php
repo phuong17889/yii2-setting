@@ -1,4 +1,5 @@
 <?php
+
 namespace navatech\setting\models;
 
 use kartik\password\PasswordInput;
@@ -17,6 +18,7 @@ use Yii;
 use yii\base\ErrorException;
 use yii\bootstrap\Html;
 use yii\db\ActiveRecord;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 use yii\helpers\Url;
 use yii\web\NotFoundHttpException;
@@ -302,11 +304,11 @@ class Setting extends ActiveRecord {
 				]);
 			case self::TYPE_ROXYMCE:
 				return RoxyMceWidget::widget([
-					'id'          => 'Setting_' . $this->code,
-					'name'        => 'Setting[' . $this->code . ']',
-					'value'       => $this->value,
-					'action'      => Url::to(['roxymce/default']),
-					'options'     => $options != null ? $options : [
+					'id'            => 'Setting_' . $this->code,
+					'name'          => 'Setting[' . $this->code . ']',
+					'value'         => $this->value,
+					'action'        => Url::to(['roxymce/default']),
+					'options'       => $options != null ? $options : [
 						'title' => $this->getName(),
 					],
 					'clientOptions' => $pluginOptions != null ? $pluginOptions : [],
@@ -393,24 +395,23 @@ class Setting extends ActiveRecord {
 					throw new ErrorException(Yii::t('setting', 'Switch Field should have store with 2 value, and negative is first. Example: no,yes'), 500);
 				}
 				return Html::hiddenInput('Setting[' . $this->code . ']', $selector[0]) . SwitchInput::widget([
-					'name'             => 'Setting[' . $this->code . ']',
-					'value'            => $selector[1],
-					'containerOptions' => [
-						'class' => 'nv-switch-container',
-					],
-					'options'          => $options != null ? $options : [],
-					'pluginOptions'    => $pluginOptions != null ? $pluginOptions : [
-						'state'   => $this->value == $selector[1],
-						'size'    => 'small',
-						'offText' => ucfirst($selector[0]),
-						'onText'  => ucfirst($selector[1]),
-					],
-				]);
+						'name'             => 'Setting[' . $this->code . ']',
+						'containerOptions' => [
+							'class' => 'nv-switch-container',
+						],
+						'options'          => ArrayHelper::merge(['value' => $selector[1]], $options != null ? $options : []),
+						'pluginOptions'    => $pluginOptions != null ? $pluginOptions : [
+							'state'   => $this->value == $selector[1],
+							'size'    => 'small',
+							'offText' => ucfirst($selector[0]),
+							'onText'  => ucfirst($selector[1]),
+						],
+					]);
 			case self::TYPE_CHECKBOX:
 				$random = rand(1000, 9999);
 				return Html::checkboxList('Setting[' . $this->code . ']', explode(",", $this->value), $this->getStoreRange(), $options != null ? $options : [
 					'class' => 'nv-checkbox-list checkbox',
-					'item'  => function ($index, $label, $name, $checked, $value) use ($random) {
+					'item'  => function($index, $label, $name, $checked, $value) use ($random) {
 						$html = Html::beginTag('div');
 						$html .= Html::checkbox($name, $checked, [
 							'id'    => 'Setting_checkbox_' . $label . '_' . $index . '_' . $random,
@@ -425,7 +426,7 @@ class Setting extends ActiveRecord {
 				$random = rand(1000, 9999);
 				return Html::radioList('Setting[' . $this->code . ']', $this->value, $this->getStoreRange(), $options != null ? $options : [
 					'class' => 'nv-checkbox-list radio',
-					'item'  => function ($index, $label, $name, $checked, $value) use ($random) {
+					'item'  => function($index, $label, $name, $checked, $value) use ($random) {
 						$html = Html::beginTag('div');
 						$html .= Html::radio($name, $checked, [
 							'id'    => 'Setting_radio_' . $label . '_' . $index . '_' . $random,
@@ -622,10 +623,7 @@ class Setting extends ActiveRecord {
 	public static function parentDependent() {
 		$response[0] = Yii::t('setting', 'No parent');
 		/**@var Setting[] $actionSettings */
-		$actionSettings = self::find()
-			->where(['type' => self::TYPE_ACTION])
-			->orderBy(['sort_order' => SORT_ASC])
-			->all();
+		$actionSettings = self::find()->where(['type' => self::TYPE_ACTION])->orderBy(['sort_order' => SORT_ASC])->all();
 		if ($actionSettings !== null) {
 			foreach ($actionSettings as $actionSetting) {
 				$response[$actionSetting->id] = 'Action ' . $actionSetting->name;
