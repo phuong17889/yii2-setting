@@ -307,7 +307,7 @@ class Setting extends ActiveRecord {
 					'id'            => 'Setting_' . $this->code,
 					'name'          => 'Setting[' . $this->code . ']',
 					'value'         => $this->value,
-					'action'        => Url::to(['roxymce/default']),
+					'action'        => Url::to(['/roxymce/default']),
 					'options'       => $options != null ? $options : [
 						'title' => $this->getName(),
 					],
