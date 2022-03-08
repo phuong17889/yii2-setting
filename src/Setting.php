@@ -1,8 +1,8 @@
 <?php
 
-namespace navatech\setting;
+namespace phuong17889\setting;
 
-use navatech\setting\models\Setting as SettingModel;
+use phuong17889\setting\models\Setting as SettingModel;
 use Yii;
 use yii\base\Component;
 use yii\base\InvalidConfigException;
@@ -20,83 +20,87 @@ use yii\helpers\Url;
  * @method string getSortOrder(string $code, string $default = '')
  * @method string getStoreUrl(string $code, string $default = '')
  */
-class Setting extends Component {
+class Setting extends Component
+{
 
-	/**
-	 * @param      $code
-	 * @param null $default
-	 *
-	 * @return null|string
-	 * @throws InvalidConfigException
-	 */
-	public function get($code, $default = null) {
-		if (!$code) {
-			return $default;
-		}
-		$setting = SettingModel::findOne(['code' => $code]);
-		if ($setting) {
-			if ($setting->type == SettingModel::TYPE_FILE_PATH) {
-				$setting->value = Yii::getAlias($setting->store_dir) . DIRECTORY_SEPARATOR . $setting->value;
-			}
-			if ($setting->type == SettingModel::TYPE_FILE_URL) {
-				if (php_sapi_name() != 'cli') {
-					if (strpos($setting->store_url, 'http') !== false) {
-						$setting->value = $setting->store_url . '/' . $setting->value;
-					} else {
-						$setting->value = Url::to([$setting->store_url . '/' . $setting->value], true);
-					}
-				} else {
-					$setting->value = $setting->store_url . '/' . $setting->value;
-				}
-			}
-			if (in_array($setting->type, [
-					SettingModel::TYPE_CHECKBOX,
-					SettingModel::TYPE_MULTI_SELECT,
-				]) && $setting->value != ''
-			) {
-				$setting->value = explode(",", $setting->value);
-			}
-			return $setting->value;
-		} else {
-			if (YII_ENV_DEV && $default == null) {
-				throw new InvalidConfigException(Yii::t('setting', 'Record "{0}" doesn\'t exists. Make sure that you\'ve added it in the configuration!', [$code]));
-			}
-			return $default;
-		}
-	}
+    /**
+     * @param      $code
+     * @param null $default
+     *
+     * @return null|string
+     * @throws InvalidConfigException
+     */
+    public function get($code, $default = null)
+    {
+        if (!$code) {
+            return $default;
+        }
+        $setting = SettingModel::findOne(['code' => $code]);
+        if ($setting) {
+            if ($setting->type == SettingModel::TYPE_FILE_PATH) {
+                $setting->value = Yii::getAlias($setting->store_dir) . DIRECTORY_SEPARATOR . $setting->value;
+            }
+            if ($setting->type == SettingModel::TYPE_FILE_URL) {
+                if (php_sapi_name() != 'cli') {
+                    if (strpos($setting->store_url, 'http') !== false) {
+                        $setting->value = $setting->store_url . '/' . $setting->value;
+                    } else {
+                        $setting->value = Url::to([$setting->store_url . '/' . $setting->value], true);
+                    }
+                } else {
+                    $setting->value = $setting->store_url . '/' . $setting->value;
+                }
+            }
+            if (in_array($setting->type, [
+                    SettingModel::TYPE_CHECKBOX,
+                    SettingModel::TYPE_MULTI_SELECT,
+                ]) && $setting->value != ''
+            ) {
+                $setting->value = explode(",", $setting->value);
+            }
+            return $setting->value;
+        } else {
+            if (YII_ENV_DEV && $default == null) {
+                throw new InvalidConfigException(Yii::t('setting', 'Record "{0}" doesn\'t exists. Make sure that you\'ve added it in the configuration!', [$code]));
+            }
+            return $default;
+        }
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public function __call($name, $params) {
-		$code    = isset($params[0]) ? $params[0] : false;
-		$default = isset($params[1]) ? $params[1] : '';
-		if (!$code) {
-			return $default;
-		}
-		$setting = SettingModel::findOne(['code' => $code]);
-		if ($setting !== null) {
-			$name = str_replace('get', '', $name);
-			$name = substr(strtolower(preg_replace("/([A-Z]+)/", "_$1", $name)), 1);
-			if ($setting->hasAttribute($name)) {
-				return $setting->$name;
-			} else {
-				return $default;
-			}
-		} else {
-			if (YII_ENV_DEV && $default == null) {
-				throw new InvalidConfigException(Yii::t('setting', 'Record "{0}" doesn\'t exists. Make sure that you\'ve added it in the configuration!', [$code]));
-			}
-			return $default;
-		}
-	}
+    /**
+     * {@inheritDoc}
+     */
+    public function __call($name, $params)
+    {
+        $code = isset($params[0]) ? $params[0] : false;
+        $default = isset($params[1]) ? $params[1] : '';
+        if (!$code) {
+            return $default;
+        }
+        $setting = SettingModel::findOne(['code' => $code]);
+        if ($setting !== null) {
+            $name = str_replace('get', '', $name);
+            $name = substr(strtolower(preg_replace("/([A-Z]+)/", "_$1", $name)), 1);
+            if ($setting->hasAttribute($name)) {
+                return $setting->$name;
+            } else {
+                return $default;
+            }
+        } else {
+            if (YII_ENV_DEV && $default == null) {
+                throw new InvalidConfigException(Yii::t('setting', 'Record "{0}" doesn\'t exists. Make sure that you\'ve added it in the configuration!', [$code]));
+            }
+            return $default;
+        }
+    }
 
-	/**
-	 * @param string $code
-	 *
-	 * @return string
-	 */
-	public function __get($code) {
-		return $this->get($code);
-	}
+    /**
+     * @param string $code
+     *
+     * @return string
+     */
+    public function __get($code)
+    {
+        return $this->get($code);
+    }
 }

@@ -10,13 +10,13 @@ The preferred way to install this extension is through [composer](http://getcomp
 Either run
 
 ```
-php composer.phar require navatech/yii2-setting "1.0.*"
+php composer.phar require phuong17889/yii2-setting "*"
 ```
 
 or add
 
 ```
-"navatech/yii2-setting": "1.0.*"
+"phuong17889/yii2-setting": "*"
 ```
 
 to the require section of your `composer.json` file.
@@ -32,14 +32,14 @@ Once the extension is installed, simply use it in your code by  :
 Migration run
 
 ```php
-yii migrate --migrationPath=@navatech/setting/migrations
+yii migrate --migrationPath=@phuong17889/setting/migrations
 ```
 
 ### Config /common/config/main.php to use Yii::$app->setting
 ```php
     'components' => [
         'setting' => [
-            'class' => 'navatech\setting\Setting',
+            'class' => 'phuong17889\setting\Setting',
         ],
     ],
 ```
@@ -49,15 +49,15 @@ yii migrate --migrationPath=@navatech/setting/migrations
 ```php
     'modules'    => [
    		'setting'  => [
-			'class'               => 'navatech\setting\Module',
-			'controllerNamespace' => 'navatech\setting\controllers',
-			'enableMultiLanguage' => false,//set true if navatech/yii2-multi-language installed and want to translate setting
+			'class'               => 'phuong17889\setting\Module',
+			'controllerNamespace' => 'phuong17889\setting\controllers',
+			'enableMultiLanguage' => false,//set true if phuong17889/yii2-multi-language installed and want to translate setting
    		],
    		'gridview' => [
             'class' => '\kartik\grid\Module',
    		],
    		'roxymce'  => [
-            'class' => '\navatech\roxymce\Module',
+            'class' => '\phuong17889\roxymce\Module',
    		],
     ],
 ```

@@ -1,5 +1,5 @@
 {
-	"name" : "navatech/yii2-setting",
+	"name" : "phuong17889/yii2-setting",
 	"description" : "Yii2 Setting for other application",
 	"type" : "yii2-extension",
 	"keywords" : [
@@ -22,15 +22,15 @@
 			"email" : "phuong17889@gmail.com"
 		}
 	],
-	"homepage" : "https://navatech.vn",
+	"homepage" : "https://lephuong.org",
 	"support" : {
-		"source" : "https://github.com/navatech/yii2-setting"
+		"source" : "https://github.com/phuong17889/yii2-setting"
 	},
 	"require" : {
 		"bower-asset/awesome-bootstrap-checkbox" : "@dev",
 		"insolita/yii2-iconpicker" : "@dev",
-		"navatech/yii2-navatech-base" : "@dev",
-		"navatech/yii2-roxymce" : "@dev",
+		"phuong17889/yii2-base" : "@dev",
+		"phuong17889/yii2-roxymce" : "@dev",
 		"kartik-v/yii2-password" : "@dev",
 		"kartik-v/yii2-widgets" : "@dev",
 		"kartik-v/yii2-tabs-x" : "@dev",
@@ -39,10 +39,10 @@
 	},
 	"autoload" : {
 		"psr-4" : {
-			"navatech\\setting\\" : "src/"
+			"phuong17889\\setting\\" : "src/"
 		}
 	},
 	"extra" : {
-		"bootstrap" : "navatech\\setting\\Bootstrap"
+		"bootstrap" : "phuong17889\\setting\\Bootstrap"
 	}
 }
