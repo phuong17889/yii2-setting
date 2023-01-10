@@ -1,15 +1,15 @@
 <?php
 /**
- * Created by phuong17889.
+ * Created by phuongdev89.
  * @project RoxyMce
  * @author  Phuong
- * @email   phuong17889[at]gmail.com
+ * @email   phuongdev89@gmail.com
  * @date    17/02/2016
  * @time    12:09 CH
  * @version 1.0.0
  */
 
-namespace phuong17889\setting\assets;
+namespace phuongdev89\setting\assets;
 
 use yii\web\AssetBundle;
 

@@ -10,13 +10,13 @@ The preferred way to install this extension is through [composer](http://getcomp
 Either run
 
 ```
-php composer.phar require phuong17889/yii2-setting "*"
+php composer.phar require phuongdev89/yii2-setting "*"
 ```
 
 or add
 
 ```
-"phuong17889/yii2-setting": "*"
+"phuongdev89/yii2-setting": "*"
 ```
 
 to the require section of your `composer.json` file.
@@ -32,14 +32,14 @@ Once the extension is installed, simply use it in your code by  :
 Migration run
 
 ```php
-yii migrate --migrationPath=@phuong17889/setting/migrations
+yii migrate --migrationPath=@phuongdev89/setting/migrations
 ```
 
 ### Config /common/config/main.php to use Yii::$app->setting
 ```php
     'components' => [
         'setting' => [
-            'class' => 'phuong17889\setting\Setting',
+            'class' => 'phuongdev89\setting\Setting',
         ],
     ],
 ```
@@ -49,15 +49,15 @@ yii migrate --migrationPath=@phuong17889/setting/migrations
 ```php
     'modules'    => [
    		'setting'  => [
-			'class'               => 'phuong17889\setting\Module',
-			'controllerNamespace' => 'phuong17889\setting\controllers',
-			'enableMultiLanguage' => false,//set true if phuong17889/yii2-multi-language installed and want to translate setting
+			'class'               => 'phuongdev89\setting\Module',
+			'controllerNamespace' => 'phuongdev89\setting\controllers',
+			'enableMultiLanguage' => false,//set true if phuongdev89/yii2-multi-language installed and want to translate setting
    		],
    		'gridview' => [
             'class' => '\kartik\grid\Module',
    		],
    		'roxymce'  => [
-            'class' => '\phuong17889\roxymce\Module',
+            'class' => '\phuongdev89\roxymce\Module',
    		],
     ],
 ```

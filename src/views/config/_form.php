@@ -2,7 +2,7 @@
 
 use insolita\iconpicker\Iconpicker;
 use kartik\widgets\Select2;
-use phuong17889\setting\models\Setting;
+use phuongdev89\setting\models\Setting;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -16,14 +16,14 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin(); ?>
     <div class="row">
         <div class="col-sm-4">
-            <?= $form->field($model, 'parent_id')->widget(Select2::className(), [
+            <?= $form->field($model, 'parent_id')->widget(Select2::class, [
                 'data' => Setting::parentDependent(),
                 'options' => ['placeholder' => Yii::t('setting', 'Select a parent tab ...')],
                 'pluginOptions' => [
                     'allowClear' => true,
                 ],
             ]) ?>
-            <?= $form->field($model, 'type')->widget(Select2::className(), [
+            <?= $form->field($model, 'type')->widget(Select2::class, [
                 'data' => Setting::TYPE,
                 'options' => ['placeholder' => Yii::t('setting', 'Select a type ...')],
                 'pluginOptions' => [

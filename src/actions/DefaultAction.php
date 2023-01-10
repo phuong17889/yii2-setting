@@ -1,10 +1,10 @@
 <?php
 
-namespace phuong17889\setting\actions;
+namespace phuongdev89\setting\actions;
 
-use phuong17889\language\Translate;
-use phuong17889\setting\models\Setting;
-use phuong17889\setting\Module;
+use phuongdev89\language\Translate;
+use phuongdev89\setting\models\Setting;
+use phuongdev89\setting\Module;
 use Yii;
 use yii\base\Action;
 use yii\web\UploadedFile;
@@ -36,7 +36,7 @@ class DefaultAction extends Action
             }
             if ($setting != null) {
                 foreach ($setting as $key => $value) {
-                    if ($value !== '' || $value != null) {
+                    if ($value !== '') {
                         if (is_array($value)) {
                             Setting::updateAll(['value' => implode(",", $value)], ['code' => $key]);
                         } else {

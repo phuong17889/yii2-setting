@@ -1,12 +1,13 @@
 <?php
 
-namespace phuong17889\setting\controllers;
+namespace phuongdev89\setting\controllers;
 
-use phuong17889\base\Module;
-use phuong17889\language\Translate;
-use phuong17889\role\filters\RoleFilter;
-use phuong17889\setting\models\search\SettingSearch;
-use phuong17889\setting\models\Setting;
+use phuongdev89\base\Module;
+use phuongdev89\language\Translate;
+use phuongdev89\role\filters\RoleFilter;
+use phuongdev89\setting\models\search\SettingSearch;
+use phuongdev89\setting\models\Setting;
+use Throwable;
 use Yii;
 use yii\db\StaleObjectException;
 use yii\filters\AccessControl;
@@ -194,7 +195,7 @@ class ConfigController extends Controller
      *
      * @return Response
      * @throws NotFoundHttpException
-     * @throws StaleObjectException
+     * @throws StaleObjectException|Throwable
      */
     public function actionDelete($id)
     {

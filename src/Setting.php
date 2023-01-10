@@ -1,8 +1,8 @@
 <?php
 
-namespace phuong17889\setting;
+namespace phuongdev89\setting;
 
-use phuong17889\setting\models\Setting as SettingModel;
+use phuongdev89\setting\models\Setting as SettingModel;
 use Yii;
 use yii\base\Component;
 use yii\base\InvalidConfigException;
@@ -69,11 +69,12 @@ class Setting extends Component
 
     /**
      * {@inheritDoc}
+     * @throws InvalidConfigException
      */
     public function __call($name, $params)
     {
-        $code = isset($params[0]) ? $params[0] : false;
-        $default = isset($params[1]) ? $params[1] : '';
+        $code = $params[0] ?? false;
+        $default = $params[1] ?? '';
         if (!$code) {
             return $default;
         }
@@ -95,12 +96,13 @@ class Setting extends Component
     }
 
     /**
-     * @param string $code
+     * @param string $name
      *
      * @return string
+     * @throws InvalidConfigException
      */
-    public function __get($code)
+    public function __get($name)
     {
-        return $this->get($code);
+        return $this->get($name);
     }
 }

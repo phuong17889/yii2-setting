@@ -1,6 +1,8 @@
 <?php
 
-use phuong17889\setting\models\Setting;
+use phuongdev89\setting\models\Setting;
+use yii\db\Migration;
+use yii\db\mysql\Schema;
 
 /**
  * Created by PhpStorm.
@@ -8,12 +10,12 @@ use phuong17889\setting\models\Setting;
  * Date: 8/18/2016
  * Time: 5:14 PM
  */
-class m160901_198342_change_setting_type extends \yii\db\Migration
+class m160901_198342_change_setting_type extends Migration
 {
 
     public function safeUp()
     {
-        $this->alterColumn('{{%setting}}', 'type', \yii\db\mysql\Schema::TYPE_STRING . '(255) NOT NULL');
+        $this->alterColumn('{{%setting}}', 'type', Schema::TYPE_STRING . '(255) NOT NULL');
         /**@var Setting[] $settings */
         $settings = Setting::find()->all();
         $type = array_keys(Setting::TYPE);

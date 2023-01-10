@@ -6,8 +6,8 @@
 
 use kartik\editable\Editable;
 use kartik\grid\GridView;
-use phuong17889\setting\models\search\SettingSearch;
-use phuong17889\setting\models\Setting;
+use phuongdev89\setting\models\search\SettingSearch;
+use phuongdev89\setting\models\Setting;
 use yii\data\ActiveDataProvider;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
@@ -16,7 +16,7 @@ use yii\web\View;
 $this->title = Yii::t('setting', 'Setting');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="phuong17889-setting">
+<div class="phuongdev89-setting">
     <div class="col-sm-12">
         <div class="setting-index">
             <h1><?= Html::encode($this->title) ?></h1>
@@ -55,6 +55,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'expandOneOnly' => true,
                     ],
                     [
+                        'class' => 'kartik\grid\DataColumn',
                         'attribute' => 'parent_id',
                         'filterType' => GridView::FILTER_SELECT2,
                         'filter' => ArrayHelper::map(Setting::find()->where([

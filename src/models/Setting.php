@@ -1,6 +1,6 @@
 <?php
 
-namespace phuong17889\setting\models;
+namespace phuongdev89\setting\models;
 
 use kartik\password\PasswordInput;
 use kartik\widgets\ColorInput;
@@ -11,9 +11,10 @@ use kartik\widgets\RangeInput;
 use kartik\widgets\Select2;
 use kartik\widgets\SwitchInput;
 use kartik\widgets\TimePicker;
-use phuong17889\language\Translate;
-use phuong17889\roxymce\widgets\RoxyMceWidget;
-use phuong17889\setting\Module;
+use phuongdev89\language\Translate;
+use phuongdev89\roxymce\widgets\RoxyMceWidget;
+use phuongdev89\setting\Module;
+use Throwable;
 use Yii;
 use yii\base\ErrorException;
 use yii\bootstrap\Html;
@@ -39,6 +40,9 @@ use yii\web\UploadedFile;
  * @property string $store_url
  * @property string $value
  * @property integer $sort_order
+ *
+ * @property array $storeRange
+ * @property string $content
  */
 class Setting extends ActiveRecord
 {
@@ -126,6 +130,9 @@ class Setting extends ActiveRecord
      * @param null $code
      *
      * @return array
+     * @throws ErrorException
+     * @throws NotFoundHttpException
+     * @throws Throwable
      */
     public static function getItems($code = null)
     {
@@ -173,6 +180,9 @@ class Setting extends ActiveRecord
 
     /**
      * @return string
+     * @throws ErrorException
+     * @throws NotFoundHttpException
+     * @throws Throwable
      */
     public function getContent()
     {
@@ -216,7 +226,7 @@ class Setting extends ActiveRecord
             try {
                 return $this->name;
             } catch (ErrorException $e) {
-                throw new ErrorException(Yii::t('setting', 'You should run migrations by command {0}', ['"php yii migrate --migrationPath=@phuong17889/setting/migrations"']));
+                throw new ErrorException(Yii::t('setting', 'You should run migrations by command {0}', ['"php yii migrate --migrationPath=@phuongdev89/setting/migrations"']));
             }
         }
     }
@@ -226,16 +236,13 @@ class Setting extends ActiveRecord
      * @param null $pluginOptions
      *
      * @return string
-     * @throws \Exception
+     * @throws ErrorException
+     * @throws NotFoundHttpException
+     * @throws Throwable
      */
     public function getItem($options = null, $pluginOptions = null)
     {
         switch ($this->type) {
-            case self::TYPE_TEXT:
-                return Html::input('text', 'Setting[' . $this->code . ']', $this->value, $options != null ? $options : [
-                    'placeholder' => $this->getName(),
-                    'class' => 'form-control',
-                ]);
             case self::TYPE_EMAIL:
                 return Html::input('email', 'Setting[' . $this->code . ']', $this->value, $options != null ? $options : [
                     'placeholder' => $this->getName(),
@@ -445,6 +452,7 @@ class Setting extends ActiveRecord
                 ]);
             case self::TYPE_SEPARATOR:
                 return '<hr>';
+            case self::TYPE_TEXT:
             default:
                 return Html::input('text', 'Setting[' . $this->code . ']', $this->value, $options != null ? $options : [
                     'placeholder' => $this->getName(),
@@ -665,7 +673,7 @@ class Setting extends ActiveRecord
     /**
      * @param $extension
      *
-     * @return int|string
+     * @return string
      */
     public static function fileType($extension)
     {

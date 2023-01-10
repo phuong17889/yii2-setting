@@ -1,13 +1,14 @@
 <?php
 
 use yii\db\Migration;
+use yii\db\mysql\Schema;
 
 class m160929_075128_add_icon extends Migration
 {
 
     public function up()
     {
-        $this->addColumn('{{%setting}}', 'icon', \yii\db\mysql\Schema::TYPE_STRING . '(255) NOT NULL DEFAULT ""');
+        $this->addColumn('{{%setting}}', 'icon', Schema::TYPE_STRING . '(255) NOT NULL DEFAULT ""');
     }
 
     public function down()

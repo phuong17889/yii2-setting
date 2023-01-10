@@ -1,13 +1,13 @@
 <?php
 
-namespace phuong17889\setting\models\search;
+namespace phuongdev89\setting\models\search;
 
-use phuong17889\setting\models\Setting;
+use phuongdev89\setting\models\Setting;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 
 /**
- * SettingSearch represents the model behind the search form about `\phuong17889\setting\models\Setting`.
+ * SettingSearch represents the model behind the search form about `\phuongdev89\setting\models\Setting`.
  */
 class SettingSearch extends Setting
 {

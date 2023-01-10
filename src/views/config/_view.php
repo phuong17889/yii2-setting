@@ -1,15 +1,15 @@
 <?php
 /**
- * Created by phuong17889.
+ * Created by phuongdev89.
  * @project yii2-basic
  * @author  Phuong
- * @email   phuong17889[at]gmail.com
+ * @email   phuongdev89@gmail.com
  * @date    5/5/2016
  * @time    4:02 PM
  * @var Setting $model
  */
 
-use phuong17889\setting\models\Setting;
+use phuongdev89\setting\models\Setting;
 
 ?>
 

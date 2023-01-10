@@ -1,22 +1,17 @@
 <?php
 
-namespace phuong17889\setting;
+namespace phuongdev89\setting;
 
 use Yii;
 
-class Module extends \phuong17889\base\Module
+class Module extends \phuongdev89\base\Module
 {
 
-    public $controllerNamespace = 'phuong17889\setting\controllers';
+    public $controllerNamespace = 'phuongdev89\setting\controllers';
 
     public $enableMultiLanguage = false;
 
     protected $_isBackend;
-
-    public function init()
-    {
-        parent::init();
-    }
 
     /**
      * Check if module is used for backend application.
@@ -26,7 +21,7 @@ class Module extends \phuong17889\base\Module
     public function isBackend()
     {
         if ($this->_isBackend === null) {
-            $this->_isBackend = strpos(Yii::$app->controllerNamespace, 'backend') === false ? false : true;
+            $this->_isBackend = !(strpos(Yii::$app->controllerNamespace, 'backend') === false);
         }
         return $this->_isBackend;
     }

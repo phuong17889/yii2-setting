@@ -1,8 +1,8 @@
 <?php
 
 use kartik\tabs\TabsX;
-use phuong17889\setting\assets\AwesomeBootstrapCheckboxAsset;
-use phuong17889\setting\models\Setting;
+use phuongdev89\setting\assets\AwesomeBootstrapCheckboxAsset;
+use phuongdev89\setting\models\Setting;
 use yii\bootstrap\Alert;
 use yii\bootstrap\Html;
 use yii\web\View;
@@ -20,7 +20,7 @@ if (Yii::$app->session->hasFlash('alert')) {
     echo Alert::widget(Yii::$app->session->getFlash('alert'));
 }
 ?>
-<div class="phuong17889-setting">
+<div class="phuongdev89-setting">
     <div class="col-sm-12">
         <?php if (YII_ENV_DEV): ?>
             <p class="pull-right">

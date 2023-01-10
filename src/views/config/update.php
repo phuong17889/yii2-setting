@@ -3,7 +3,7 @@
 
 /* @var $model Setting */
 
-use phuong17889\setting\models\Setting;
+use phuongdev89\setting\models\Setting;
 use yii\helpers\Html;
 use yii\web\View;
 
@@ -21,7 +21,7 @@ $this->params['breadcrumbs'][] = [
 ];
 $this->params['breadcrumbs'][] = Yii::t('setting', 'Update');
 ?>
-<div class="phuong17889-setting">
+<div class="phuongdev89-setting">
     <div class="col-sm-12">
         <div class="setting-update">
             <h1><?= Html::encode($this->title) ?></h1>
